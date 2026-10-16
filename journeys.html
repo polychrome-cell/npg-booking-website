@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f4ef" />
+    <meta name="description" content="Discover Tsuki: Journeys, fictional flight, hotel, and itinerary packages from Tsuki Airways." />
+    <title>Tsuki: Journeys — Thoughtful trips, made together</title>
+    <link rel="icon" type="image/svg+xml" href="assets/npg-mark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20261016-admin1" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js?v=20261016-admin1"></script>
+    <script src="settings.js?v=20261016-admin1" defer></script>
+    <script src="app.js?v=20261016-original-marks" defer></script>
+    <script src="site-pages.js?v=20261016-original-marks" defer></script>
+  </head>
+  <body>
+    <div class="fictional-ribbon"><span class="ribbon-dot" aria-hidden="true"></span> FICTIONAL AIRLINE EXPERIENCE <span class="ribbon-divider">·</span> NO REAL TICKETS OR PAYMENTS</div>
+    <header class="site-header">
+      <a class="brand-lockup" href="index.html#top" aria-label="Nippon Pacific Group home">
+        <img src="assets/npg-mark.svg" alt="" width="40" height="40" />
+        <span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span></button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html#journey">Plan a journey</a><a href="index.html#airlines">Our airlines</a><a href="journeys.html" aria-current="page">Tsuki: Journeys</a><a href="routes.html">Routes</a><a href="fleet.html">Fleet</a>
+      </nav>
+      <div class="header-actions"><button class="settings-trigger" id="settings-trigger" type="button" aria-label="Open settings" aria-haspopup="dialog" aria-controls="site-settings-dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.31.06-.62.06-.94s-.02-.63-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.28 7.28 0 0 0-1.63-.94l-.36-2.54A.48.48 0 0 0 13.88 2h-3.84a.48.48 0 0 0-.49.42l-.36 2.54c-.59.23-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.61.22L2.64 8.48a.5.5 0 0 0 .12.64l2.03 1.58a7.5 7.5 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .61.22l2.39-.96c.5.39 1.04.71 1.63.94l.36 2.54c.04.25.25.43.5.43h3.84c.25 0 .46-.18.5-.43l.36-2.54c.59-.23 1.13-.55 1.63-.94l2.39.96a.5.5 0 0 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.02-1.58ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" /></svg></button><a class="header-cta" href="#destinations">Explore journeys <span aria-hidden="true">↘</span></a></div>
+    </header>
+
+    <main id="tsuki-journeys-page" class="journeys-page">
+      <div class="journeys-shell section-shell">
+        <section class="journeys-hero" aria-labelledby="journeys-title">
+          <div class="journeys-hero-copy">
+            <div class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> TSUKI AIRWAYS PRESENTS</div>
+            <p class="journeys-brandline"><span class="journeys-brand-mark" aria-hidden="true">月</span> TSUKI: JOURNEYS</p>
+            <h1 id="journeys-title">A trip that feels<br /><em>like it was yours.</em></h1>
+            <p class="journeys-hero-intro">Flight, stay, transfers, and thoughtful plans for the days in between. Find a new way to see Japan, Dubai, Singapore, and Europe.</p>
+            <div class="journeys-hero-actions"><a class="button button-light" href="#destinations">Explore the journeys <span aria-hidden="true">↓</span></a><a class="journeys-quiet-link" href="routes.html#tsuki">See Tsuki’s flight network <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="journeys-hero-art" role="img" aria-label="A moonlit route connecting Japan, Dubai, Singapore, and Europe">
+            <div class="journeys-hero-art-top"><span>THE WORLD, AT YOUR PACE</span><span>月</span></div>
+            <div class="journeys-hero-map"><img src="journey-routes-map.svg" alt="" /></div>
+            <div class="journeys-hero-art-foot"><span>FOUR DESTINATIONS</span><span>ONE THOUGHTFUL JOURNEY</span></div>
+          </div>
+          <div class="journeys-hero-index" aria-hidden="true">01 / 04</div>
+        </section>
+
+        <section id="destinations" class="journeys-destinations" aria-labelledby="destination-title">
+          <div class="journeys-section-heading"><div><span class="journeys-kicker">GO SOMEWHERE MEANINGFUL</span><h2 id="destination-title">Choose your <em>chapter.</em></h2></div><p>Each Tsuki: Journeys package brings the pieces together, so you can spend more time being there.</p></div>
+          <div class="journey-destination-grid">
+            <article class="journey-destination-card">
+              <div class="journey-art journey-art-japan" aria-hidden="true"><span class="journey-art-sun"></span><span class="journey-art-hill"></span><span class="journey-art-landmark">京</span><small>JAPAN · OLD AND NEW</small></div>
+              <div class="journey-card-copy"><span class="journeys-kicker">CULTURE · CRAFT · QUIET MOMENTS</span><h3>Traditional Japan</h3><p>Take the slower streets through temple gardens, old town lanes, and the rituals that make each day feel distinct.</p><button type="button" data-journey-destination="japan">Plan this journey <span aria-hidden="true">↗</span></button></div>
+            </article>
+            <article class="journey-destination-card">
+              <div class="journey-art journey-art-dubai" aria-hidden="true"><span class="journey-art-sun"></span><span class="journey-art-hill"></span><span class="journey-art-landmark">دبي</span><small>DUBAI · CITY OF CONTRASTS</small></div>
+              <div class="journey-card-copy"><span class="journeys-kicker">7 DAYS · TSUKI SIGNATURE</span><h3>Dubai, in a new light</h3><p>A seven-day city escape, with Premium Economy flights and the details of your stay and daily plans thoughtfully arranged.</p><button type="button" data-journey-destination="dubai" data-journey-tier="signature">Plan this journey <span aria-hidden="true">↗</span></button></div>
+            </article>
+            <article class="journey-destination-card">
+              <div class="journey-art journey-art-singapore" aria-hidden="true"><span class="journey-art-sun"></span><span class="journey-art-hill"></span><span class="journey-art-landmark">S</span><small>SINGAPORE · GARDEN CITY</small></div>
+              <div class="journey-card-copy"><span class="journeys-kicker">NEIGHBOURHOODS · GARDENS · WATERFRONT</span><h3>Singapore, close up</h3><p>Find the many sides of one island city, from hawker tables and hidden lanes to a softer hour by the water.</p><button type="button" data-journey-destination="singapore">Plan this journey <span aria-hidden="true">↗</span></button></div>
+            </article>
+            <article class="journey-destination-card">
+              <div class="journey-art journey-art-europe" aria-hidden="true"><span class="journey-art-sun"></span><span class="journey-art-hill"></span><span class="journey-art-landmark">E</span><small>EUROPE · MANY PERSPECTIVES</small></div>
+              <div class="journey-card-copy"><span class="journeys-kicker">7 DAYS · TSUKI GRAND VOYAGE</span><h3>A grand European story</h3><p>A seven-day European trip with Business Class flights, considered stays, and a carefully paced itinerary.</p><button type="button" data-journey-destination="europe" data-journey-tier="voyage">Plan this journey <span aria-hidden="true">↗</span></button></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="planner" class="journey-planner" aria-labelledby="planner-title">
+          <div class="journeys-section-heading"><div><span class="journeys-kicker">FLIGHT · STAY · DAYS TO REMEMBER</span><h2 id="planner-title">Build your <em>journey.</em></h2></div><p>Choose the trip length and stay that fit. Your plan includes a day-by-day route through the destination’s landmarks.</p></div>
+          <form id="journey-planner-form" class="journey-planner-form">
+            <div class="journey-planner-controls">
+              <label class="journey-control" for="journey-destination"><span>DESTINATION</span><select id="journey-destination" name="destination"><option value="japan">Traditional Japan</option><option value="dubai">Dubai</option><option value="singapore">Singapore</option><option value="europe">Europe</option></select></label>
+              <label class="journey-control" for="journey-tier"><span>TSUKI TIER</span><select id="journey-tier" name="tier"><option value="escape">Tsuki Escape · Economy</option><option value="signature">Tsuki Signature · Premium Economy</option><option value="voyage">Tsuki Grand Voyage · Business Class</option><option value="elite">Tsuki Elite Resort Class · First Class</option></select></label>
+              <label class="journey-control" for="journey-duration"><span>TRIP LENGTH</span><select id="journey-duration" name="duration"><option value="5">5 days</option><option value="7" selected>7 days</option><option value="10">10 days</option></select></label>
+              <label class="journey-control" for="journey-departure"><span>DEPARTURE</span><input id="journey-departure" name="departure" type="date" required /></label>
+              <label class="journey-control journey-hotel-control" for="journey-hotel"><span>FICTIONAL HOTEL / RESORT</span><select id="journey-hotel" name="hotel"></select></label>
+              <label class="journey-control" for="journey-travelers"><span>TRAVELERS</span><select id="journey-travelers" name="travelers"><option value="1">1 traveler</option><option value="2">2 travelers</option><option value="3">3 travelers</option><option value="4">4 travelers</option><option value="5">5 travelers</option><option value="6">6 travelers</option></select></label>
+            </div>
+            <div class="journey-planner-results">
+              <div id="journey-itinerary" class="journey-itinerary" aria-live="polite"></div>
+              <aside id="journey-summary" class="journey-booking-summary" aria-live="polite"></aside>
+            </div>
+            <p class="journey-booking-safety"><span aria-hidden="true">ⓘ</span> Fictional roleplay booking. Do not enter real information. Nothing is sent, saved, or charged.</p>
+          </form>
+        </section>
+
+        <section id="tiers" class="journeys-tiers" aria-labelledby="tiers-title">
+          <div class="journeys-section-heading"><div><span class="journeys-kicker">FOUR WAYS TO TRAVEL</span><h2 id="tiers-title">Choose your <em>Tsuki tier.</em></h2></div><p>Start with the essentials, then choose the level of comfort and care that suits your trip.</p></div>
+          <div class="journey-tier-grid">
+            <article class="journey-tier-card tier-escape"><span class="journey-tier-number">01</span><span class="journeys-kicker">THE ESSENTIALS</span><h3>Tsuki Escape</h3><p class="journey-tier-cabin">Economy Class</p><p>A thoughtful starting point with a Tsuki flight, a welcoming hotel stay, airport transfers, and a flexible destination guide.</p><button type="button" data-journey-tier="escape">Choose Escape <span aria-hidden="true">↗</span></button></article>
+            <article class="journey-tier-card tier-signature"><span class="journey-tier-number">02</span><span class="journeys-kicker">A LITTLE MORE ROOM</span><h3>Tsuki Signature</h3><p class="journey-tier-cabin">Premium Economy</p><p>More space for the journey, with a handpicked stay, smooth transfers, and experiences shaped around the destination.</p><button type="button" data-journey-tier="signature">Choose Signature <span aria-hidden="true">↗</span></button></article>
+            <article class="journey-tier-card tier-voyage"><span class="journey-tier-number">03</span><span class="journeys-kicker">THE FULL EXPERIENCE</span><h3>Tsuki Grand Voyage</h3><p class="journey-tier-cabin">Business Class</p><p>Travel in comfort from the first flight to the final transfer, with considered stays and a complete itinerary to follow.</p><button type="button" data-journey-tier="voyage">Choose Grand Voyage <span aria-hidden="true">↗</span></button></article>
+            <article class="journey-tier-card tier-elite"><span class="journey-tier-number">04</span><span class="journeys-kicker">THE ULTIMATE RETREAT</span><h3>Tsuki Elite Resort Class</h3><p class="journey-tier-cabin">First Class</p><p>First Class flights, exceptional resort stays, private chauffeured transfers, and signature experiences at every stop.</p><button type="button" data-journey-tier="elite">Choose Elite Resort <span aria-hidden="true">↗</span></button></article>
+          </div>
+          <p class="journeys-price-note">Package estimates and booking confirmations are fictional roleplay content. No real flights, hotels, or payments are booked.</p>
+        </section>
+
+        <section class="journeys-closing" aria-label="Continue exploring Tsuki Airways"><span class="journeys-closing-mark" aria-hidden="true">月</span><div><span class="journeys-kicker">YOUR NEXT CHAPTER IS OUT THERE</span><h2>Travel well.<br /><em>Take your time.</em></h2></div><a class="button button-light" href="routes.html#tsuki">Explore Tsuki Airways routes <span aria-hidden="true">↗</span></a></section>
+      </div>
+      <p class="network-disclaimer journeys-disclaimer section-shell">Nippon Pacific Group and Tsuki Airways are fictional. Tsuki: Journeys is a fictional travel-package concept for roleplay; no real reservations or payments are made.</p>
+    </main>
+
+    <dialog class="booking-dialog journey-booking-dialog" id="journey-booking-dialog" aria-labelledby="journey-dialog-title">
+      <button class="dialog-close" type="button" aria-label="Close booking dialog">×</button>
+      <div id="journey-dialog-content"></div>
+    </dialog>
+
+    <footer class="site-footer"><div class="footer-main section-shell"><a class="brand-lockup footer-brand" href="index.html#top"><img src="assets/npg-mark.svg" alt="" width="38" height="38" /><span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span></a><p>A fictional airline group for the<br />aviation community.</p><div class="footer-links"><a href="index.html#airlines">Airlines</a><a href="journeys.html">Tsuki: Journeys</a><a href="routes.html">Routes</a><a href="fleet.html">Fleet</a><a href="index.html#journey">Find a flight</a></div></div><div class="footer-bottom section-shell"><span>© 2026 Nippon Pacific Group · A fictional brand concept</span><span class="fictional-note">FICTIONAL SERVICE · NO REAL TICKETS OR PAYMENTS</span><a href="index.html#top">Back to top ↑</a></div></footer>
+    <dialog class="site-settings-dialog" id="site-settings-dialog" aria-labelledby="site-settings-title">
+      <button class="settings-close" type="button" aria-label="Close settings">×</button>
+      <div class="settings-heading"><span class="settings-kicker">A LITTLE PERSONAL COMFORT</span><h2 id="site-settings-title">Make yourself at home.</h2><p>Your preferences stay in this browser.</p></div>
+      <div class="settings-options"><label class="settings-option" for="setting-dark-mode"><span><strong>Dark mode</strong><small>A softer, darker palette for every page.</small></span><input id="setting-dark-mode" type="checkbox" role="switch" /></label><label class="settings-option" for="setting-animations"><span><strong>Animations</strong><small>Turn movement and transitions on or off.</small></span><input id="setting-animations" type="checkbox" role="switch" /></label></div>
+      <section class="stress-relief" aria-labelledby="stress-relief-title"><span class="settings-kicker" id="stress-relief-title">EXTREMELY IMPORTANT SETTING</span><button id="stress-relief-button" class="stress-relief-button" type="button">Press for stress relief ✦</button><p id="stress-relief-message" aria-live="polite">No practical effect. Vibes may improve.</p></section>
+    </dialog>
+  </body>
+</html>

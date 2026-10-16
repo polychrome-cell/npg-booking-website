@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f4ef" />
+    <meta name="description" content="Explore the fictional Nippon Pacific Group airline fleets." />
+    <title>Airline Fleets — Nippon Pacific Group</title>
+    <link rel="icon" type="image/svg+xml" href="assets/npg-mark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20261016-admin1" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js?v=20261016-admin1"></script>
+    <script src="settings.js?v=20261016-admin1" defer></script>
+    <script src="app.js?v=20261016-original-marks" defer></script>
+    <script src="site-pages.js?v=20261016-original-marks" defer></script>
+  </head>
+  <body>
+    <div class="fictional-ribbon"><span class="ribbon-dot" aria-hidden="true"></span> FICTIONAL AIRLINE EXPERIENCE <span class="ribbon-divider">·</span> NO REAL TICKETS OR PAYMENTS</div>
+    <header class="site-header">
+      <a class="brand-lockup" href="index.html#top" aria-label="Nippon Pacific Group home">
+        <img src="assets/npg-mark.svg" alt="" width="40" height="40" />
+        <span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span></button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html#journey">Plan a journey</a><a href="index.html#airlines">Our airlines</a><a href="journeys.html">Tsuki: Journeys</a><a href="routes.html">Routes</a><a href="fleet.html" aria-current="page">Fleet</a>
+      </nav>
+      <div class="header-actions"><button class="settings-trigger" id="settings-trigger" type="button" aria-label="Open settings" aria-haspopup="dialog" aria-controls="site-settings-dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.31.06-.62.06-.94s-.02-.63-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.28 7.28 0 0 0-1.63-.94l-.36-2.54A.48.48 0 0 0 13.88 2h-3.84a.48.48 0 0 0-.49.42l-.36 2.54c-.59.23-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.61.22L2.64 8.48a.5.5 0 0 0 .12.64l2.03 1.58a7.5 7.5 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .61.22l2.39-.96c.5.39 1.04.71 1.63.94l.36 2.54c.04.25.25.43.5.43h3.84c.25 0 .46-.18.5-.43l.36-2.54c.59-.23 1.13-.55 1.63-.94l2.39.96a.5.5 0 0 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.02-1.58ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" /></svg></button><a class="header-cta" href="index.html#journey">Find a flight <span aria-hidden="true">↗</span></a></div>
+    </header>
+
+    <main id="fleet-page" class="network-section fleet-page">
+      <div class="fleet-page-shell section-shell">
+        <div class="route-page-heading">
+          <div class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> THE AIRCRAFT</div>
+          <h1>Meet the fleet.<br /><em>Made for the miles.</em></h1>
+          <p>Choose an airline to see the aircraft in its fleet. More fleet details will be added as you share them.</p>
+        </div>
+        <div class="fleet-airline-choices" role="group" aria-label="Choose an airline fleet">
+          <button class="route-airline-choice is-active" type="button" data-fleet-airline="pacifica" aria-pressed="true"><span class="choice-mark pacifica-mark" aria-hidden="true">✳</span><span><strong>Grand Pacifica Air</strong><small>54 aircraft listed</small></span></button>
+          <button class="route-airline-choice" type="button" data-fleet-airline="tsuki" aria-pressed="false"><span class="choice-mark tsuki-mark" aria-hidden="true">月</span><span><strong>Tsuki Airways</strong><small>98 aircraft listed</small></span></button>
+          <button class="route-airline-choice" type="button" data-fleet-airline="orbit" aria-pressed="false"><span class="choice-mark orbit-mark" aria-hidden="true">◉</span><span><strong>Tsuki Orbit</strong><small>41 aircraft listed</small></span></button>
+        </div>
+        <section id="fleet-showcase" class="fleet-showcase" aria-live="polite"></section>
+        <a class="fleet-routes-link" href="routes.html">Explore the route maps <span aria-hidden="true">↗</span></a>
+        <p class="network-disclaimer">Nippon Pacific Group and its airlines are fictional. Aircraft types and fleet counts reflect the airline-simulator references you shared.</p>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="footer-main section-shell"><a class="brand-lockup footer-brand" href="index.html#top"><img src="assets/npg-mark.svg" alt="" width="38" height="38" /><span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span></a><p>A fictional airline group for the<br />aviation community.</p><div class="footer-links"><a href="index.html#airlines">Airlines</a><a href="journeys.html">Tsuki: Journeys</a><a href="routes.html">Routes</a><a href="fleet.html">Fleet</a><a href="index.html#journey">Find a flight</a></div></div><div class="footer-bottom section-shell"><span>© 2026 Nippon Pacific Group · A fictional brand concept</span><span class="fictional-note">FICTIONAL SERVICE · NO REAL TICKETS OR PAYMENTS</span><a href="index.html#top">Back to top ↑</a></div></footer>
+    <dialog class="site-settings-dialog" id="site-settings-dialog" aria-labelledby="site-settings-title">
+      <button class="settings-close" type="button" aria-label="Close settings">×</button>
+      <div class="settings-heading"><span class="settings-kicker">A LITTLE PERSONAL COMFORT</span><h2 id="site-settings-title">Make yourself at home.</h2><p>Your preferences stay in this browser.</p></div>
+      <div class="settings-options"><label class="settings-option" for="setting-dark-mode"><span><strong>Dark mode</strong><small>A softer, darker palette for every page.</small></span><input id="setting-dark-mode" type="checkbox" role="switch" /></label><label class="settings-option" for="setting-animations"><span><strong>Animations</strong><small>Turn movement and transitions on or off.</small></span><input id="setting-animations" type="checkbox" role="switch" /></label></div>
+      <section class="stress-relief" aria-labelledby="stress-relief-title"><span class="settings-kicker" id="stress-relief-title">EXTREMELY IMPORTANT SETTING</span><button id="stress-relief-button" class="stress-relief-button" type="button">Press for stress relief ✦</button><p id="stress-relief-message" aria-live="polite">No practical effect. Vibes may improve.</p></section>
+    </dialog>
+  </body>
+</html>
