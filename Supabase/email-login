@@ -1,0 +1,24 @@
+-- Run this in the Supabase SQL Editor, then select this function for the
+-- Auth > Hooks > Before User Created hook.
+create or replace function public.allow_only_npg_admin(event jsonb)
+returns jsonb
+language plpgsql
+as $$
+begin
+  if lower(coalesce(event->'user'->>'email', '')) = 'srianshsaprathasbehera@gmail.com' then
+    return '{}'::jsonb;
+  end if;
+
+  return jsonb_build_object(
+    'error', jsonb_build_object(
+      'http_code', 403,
+      'message', 'This site only allows its administrator to create an account.'
+    )
+  );
+end;
+$$;
+
+grant usage on schema public to supabase_auth_admin;
+grant execute on function public.allow_only_npg_admin(jsonb) to supabase_auth_admin;
+revoke execute on function public.allow_only_npg_admin(jsonb) from public, anon, authenticated;
+
