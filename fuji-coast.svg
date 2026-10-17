@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-label="A Japanese sunset over Mount Fuji and the Pacific">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d8c9b8"/><stop offset=".52" stop-color="#efd8c1"/><stop offset="1" stop-color="#e4bda3"/></linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#637c79"/><stop offset="1" stop-color="#314e4e"/></linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5dfbb"/><stop offset="1" stop-color="#d89e73"/></linearGradient>
+  </defs>
+  <rect width="960" height="600" fill="url(#sky)"/>
+  <circle cx="693" cy="180" r="95" fill="url(#sun)" opacity=".92"/>
+  <path d="M0 342c102-48 204-38 301-14 89 23 155 20 234-2 94-26 190-24 284 4 54 17 98 21 141 7v263H0Z" fill="#cbb8a8" opacity=".54"/>
+  <path d="m173 430 178-276 169 276Z" fill="#485853"/>
+  <path d="m351 154 66 107-31-9 20 28-40-14 14 26-37-17-32 34-25-34-34 16 12-24-42 14 23-30-37 9Z" fill="#f0e5d6" opacity=".94"/>
+  <path d="M0 401c95-12 161 11 260 9 113-2 176-17 271-7 121 13 203 8 429-12v209H0Z" fill="url(#sea)"/>
+  <path d="M0 451c145-18 236 20 364 5 109-13 187-22 305-6 94 13 187 13 291-2M0 500c132-14 228 17 352 6 116-11 202-17 307-2 108 16 203 11 301-2M0 551c119-9 212 16 338 5 153-13 208-14 333 0 98 10 188 3 289-4" fill="none" stroke="#c8d0c5" stroke-width="2" opacity=".36"/>
+  <path d="M579 437c70-17 141-17 209-1M521 475c93-12 175-11 284 0M420 525c75-7 119-7 185-1" fill="none" stroke="#e9cda8" stroke-width="3" opacity=".7"/>
+  <g fill="none" stroke="#fff9ed" stroke-linecap="round" opacity=".79"><path d="M115 134c15-9 30-9 44 0M125 145c13-8 25-8 37-1" stroke-width="3"/><path d="M746 288c18-11 35-10 52 1M760 300c14-9 28-8 43 1" stroke-width="2.5"/></g>
+  <path d="M112 278c143-96 264-113 390-77 111 31 186 29 282-7" fill="none" stroke="#f8f0e5" stroke-width="1.5" stroke-dasharray="3 9" opacity=".7"/>
+  <g transform="translate(574 190) rotate(-8)" fill="#fffaf0"><path d="m0 9 20-4 17-15 6 1-10 15 20 4c4 1 5 5 0 5L30 13l-9 11-4-1 4-11L0 11Z"/><path d="M20 5 27 2l2 1-5 5Z"/></g>
+  <rect width="960" height="600" fill="none" stroke="#fffaf1" stroke-width="24" opacity=".28"/>
+</svg>
