@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f4ef" />
+    <meta name="description" content="Explore journeys across three Nippon Pacific Group airlines." />
+    <title>Nippon Pacific Group — A journey, thoughtfully designed</title>
+    <link rel="icon" type="image/svg+xml" href="assets/npg-mark.svg" onerror="this.onerror=null;this.href='npg-mark.svg'" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20261019-seat-and-schedule2" />
+    <script src="settings.js?v=20261018-sora1" defer></script>
+    <script src="sora-wallet.js?v=20261019-sora-status-redemption1" defer></script>
+    <script src="app.js?v=20261019-seat-and-schedule2" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand-lockup" href="#top" aria-label="Nippon Pacific Group home">
+        <img src="assets/npg-mark.svg" onerror="this.onerror=null;this.src='npg-mark.svg'" alt="" width="40" height="40" />
+        <span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span></button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+        <a href="#journey">Plan a journey</a>
+        <a href="#airlines">Our airlines</a>
+        <a href="sora.html">Discover Sora</a>
+        <a href="journeys.html">Tsuki: Journeys</a>
+        <a href="routes.html">Routes</a>
+        <a href="fleet.html">Fleet</a>
+      </nav>
+      <div class="header-actions"><button class="settings-trigger" id="settings-trigger" type="button" aria-label="Open settings" aria-haspopup="dialog" aria-controls="site-settings-dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.31.06-.62.06-.94s-.02-.63-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.28 7.28 0 0 0-1.63-.94l-.36-2.54A.48.48 0 0 0 13.88 2h-3.84a.48.48 0 0 0-.49.42l-.36 2.54c-.59.23-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.61.22L2.64 8.48a.5.5 0 0 0 .12.64l2.03 1.58a7.5 7.5 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .61.22l2.39-.96c.5.39 1.04.71 1.63.94l.36 2.54c.04.25.25.43.5.43h3.84c.25 0 .46-.18.5-.43l.36-2.54c.59-.23 1.13-.55 1.63-.94l2.39.96a.5.5 0 0 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.02-1.58ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" /></svg></button><a class="header-cta" href="#journey">Find a flight <span aria-hidden="true">↗</span></a></div>
+    </header>
+
+    <main id="top">
+      <section class="hero section-shell">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> YOUR JOURNEY, IN GOOD COMPANY</div>
+          <h1>A softer way<br />to see the <em>world.</em></h1>
+          <p class="hero-intro">Three distinct airlines. One considered journey. Discover a more personal way to travel across Japan, Asia and the Pacific.</p>
+          <div class="hero-actions">
+            <a class="button button-dark" href="#journey">Plan your journey <span aria-hidden="true">↓</span></a>
+            <a class="text-link" href="#airlines">Meet the airlines <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-footnote"><span class="mini-sun" aria-hidden="true">✳</span> Rooted in Japan. Connected to everywhere.</div>
+        </div>
+        <div class="hero-art-wrap">
+          <img class="hero-art" src="assets/fuji-coast.svg" onerror="this.onerror=null;this.src='fuji-coast.svg'" alt="Illustration of Mount Fuji above the Pacific at sunset, with a small airplane tracing a path across the sky" />
+          <div class="art-caption"><span>THE PACIFIC, AT YOUR PACE</span><span>35° 39′ N · 139° 42′ E</span></div>
+          <div class="art-stamp" aria-hidden="true"><span>日本</span><small>JAPAN</small></div>
+        </div>
+        <div class="hero-side-note" aria-hidden="true">A new perspective, every time.</div>
+      </section>
+
+      <section id="journey" class="booking-section section-shell" aria-labelledby="booking-title">
+        <div class="booking-heading">
+          <div><div class="eyebrow"><span class="eyebrow-line"></span> LET THE JOURNEY BEGIN</div><h2 id="booking-title">Where to next?</h2></div>
+          <div class="booking-switch" role="group" aria-label="Trip type"><button class="trip-tab is-active" type="button" data-trip="round" aria-pressed="true">Round trip</button><button class="trip-tab" type="button" data-trip="oneway" aria-pressed="false">One way</button></div>
+        </div>
+        <form class="search-card" id="search-form">
+          <div class="form-grid">
+            <label id="origin-field" class="field field-location"><span class="field-label">FROM</span><span class="input-with-icon"><span class="field-icon" aria-hidden="true">⌖</span><select id="origin" name="origin" aria-label="Origin"><option value="KIX" selected>Kansai · KIX</option><option value="HND">Tokyo Haneda · HND</option><option value="NRT">Tokyo Narita · NRT</option><option value="CTS">Sapporo · CTS</option><option value="FUK">Fukuoka · FUK</option><option value="ICN">Seoul Incheon · ICN</option><option value="TPE">Taipei Taoyuan · TPE</option><option value="SIN">Singapore · SIN</option><option value="HKG">Hong Kong · HKG</option><option value="SFO">San Francisco · SFO</option><option value="SEA">Seattle · SEA</option><option value="JFK">New York · JFK</option><option value="HNL">Honolulu · HNL</option><option value="YVR">Vancouver · YVR</option><option value="PDX">Portland · PDX</option><option value="SAN">San Diego · SAN</option><option value="LAX">Los Angeles · LAX</option><option value="PHX">Phoenix · PHX</option><option value="DEN">Denver · DEN</option><option value="MSP">Minneapolis · MSP</option><option value="DFW">Dallas · DFW</option><option value="IAH">Houston · IAH</option><option value="MEX">Mexico City · MEX</option></select></span><span class="field-sub">Kansai International Airport</span></label>
+            <button class="swap-button" id="swap-airports" type="button" aria-label="Swap origin and destination" title="Swap origin and destination">↔</button>
+            <label id="destination-field" class="field field-location"><span class="field-label">TO</span><span class="input-with-icon"><span class="field-icon" aria-hidden="true">⌖</span><select id="destination" name="destination" aria-label="Destination"><option value="SFO" selected>San Francisco · SFO</option><option value="SEA">Seattle · SEA</option><option value="JFK">New York · JFK</option><option value="HND">Tokyo Haneda · HND</option><option value="NRT">Tokyo Narita · NRT</option><option value="CTS">Sapporo · CTS</option><option value="FUK">Fukuoka · FUK</option><option value="ICN">Seoul Incheon · ICN</option><option value="TPE">Taipei Taoyuan · TPE</option><option value="SIN">Singapore · SIN</option><option value="HKG">Hong Kong · HKG</option><option value="KIX">Kansai · KIX</option><option value="HNL">Honolulu · HNL</option><option value="YVR">Vancouver · YVR</option><option value="PDX">Portland · PDX</option><option value="SAN">San Diego · SAN</option><option value="LAX">Los Angeles · LAX</option><option value="PHX">Phoenix · PHX</option><option value="DEN">Denver · DEN</option><option value="MSP">Minneapolis · MSP</option><option value="DFW">Dallas · DFW</option><option value="IAH">Houston · IAH</option><option value="MEX">Mexico City · MEX</option></select></span><span class="field-sub">San Francisco International Airport</span></label>
+            <label id="depart-field" class="field field-date"><span class="field-label">DEPART</span><span class="input-with-icon"><span class="field-icon calendar-icon" aria-hidden="true">▦</span><input id="depart-date" name="depart" type="date" required /></span><span class="field-sub">Choose a departure date</span></label>
+            <label class="field field-date" id="return-field"><span class="field-label">RETURN</span><span class="input-with-icon"><span class="field-icon calendar-icon" aria-hidden="true">▦</span><input id="return-date" name="return" type="date" /></span><span class="field-sub">A little more time away</span></label>
+            <div class="field passenger-field"><span class="field-label">PASSENGERS</span><button class="passenger-trigger" id="passenger-trigger" type="button" aria-expanded="false" aria-controls="passenger-popover"><span class="field-icon" aria-hidden="true">♙</span><span id="passenger-label">1 traveler</span><span class="chevron" aria-hidden="true">⌄</span></button><span class="field-sub">Choose who is traveling</span><div class="passenger-popover" id="passenger-popover" hidden>
+              <div class="passenger-option"><div><strong>Adults</strong><small>Age 12 or over</small></div><div class="stepper"><button type="button" data-passenger="adults" data-count="down" aria-label="Remove one adult">−</button><output id="adult-count">1</output><button type="button" data-passenger="adults" data-count="up" aria-label="Add one adult">+</button></div></div>
+              <div class="passenger-option"><div><strong>Children</strong><small>Age 1.5 to under 12</small></div><div class="stepper"><button type="button" data-passenger="children" data-count="down" aria-label="Remove one child">−</button><output id="child-count">0</output><button type="button" data-passenger="children" data-count="up" aria-label="Add one child">+</button></div></div>
+              <div class="passenger-option"><div><strong>Infants</strong><small>Under 1.5 years old</small></div><div class="stepper"><button type="button" data-passenger="infants" data-count="down" aria-label="Remove one infant">−</button><output id="infant-count">0</output><button type="button" data-passenger="infants" data-count="up" aria-label="Add one infant">+</button></div></div>
+              <small class="passenger-limit">Up to 8 passengers per booking</small>
+            </div></div>
+            <label class="field cabin-field"><span class="field-label">CABIN CLASS</span><span class="input-with-icon"><span class="field-icon" aria-hidden="true">◇</span><select id="cabin-class" name="cabin" aria-label="Cabin class"><option value="economy">Economy</option><option value="premium">Premium Economy</option><option value="silver">Class Silver · Business Class</option><option value="gold">Class Gold · First Class</option></select></span><span class="field-sub">Choose your onboard experience</span></label>
+          </div>
+          <div class="search-bottom">
+            <fieldset class="carrier-choice"><legend>FLY WITH</legend><label class="carrier-pill"><input type="radio" name="carrier" value="all" checked /><span>All airlines</span></label><label class="carrier-pill"><input type="radio" name="carrier" value="tsuki" /><span>Tsuki Airways</span></label><label class="carrier-pill"><input type="radio" name="carrier" value="orbit" /><span>Tsuki Orbit</span></label><label class="carrier-pill"><input type="radio" name="carrier" value="pacifica" /><span>Grand Pacifica Air</span></label></fieldset>
+            <button class="button button-red search-button" type="submit">Find my flight <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="form-disclaimer"><span aria-hidden="true">ⓘ</span> Flight schedules and fares are planning estimates. This website does not process reservations or payments.</div>
+        </form>
+        <div id="search-message" class="search-message" role="status" aria-live="polite"></div>
+        <div id="results" class="results" aria-live="polite"></div>
+      </section>
+
+      <section class="airlines-section section-shell" id="airlines">
+        <div class="section-topline"><div class="eyebrow"><span class="eyebrow-line"></span> THE NPG FAMILY</div><a class="text-link desktop-link" href="routes.html">Discover our network <span aria-hidden="true">↗</span></a></div>
+        <div class="section-title-row"><h2>Three ways to<br /><em>feel at home.</em></h2><p>Every airline has its own rhythm. Together, they bring a little more thoughtfulness to every part of the trip.</p></div>
+        <div class="airline-cards">
+          <article class="airline-card card-tsuki"><div class="card-top"><div class="airline-lockup"><span class="brand-mark tsuki-mark" aria-hidden="true">月</span><div class="airline-wordmark"><span>Tsuki</span><strong>Airways</strong></div></div><span class="brand-role">THE LONG WAY, WELL TAKEN</span></div><p>Long-haul, made more considered. A calm, attentive journey for the miles that matter.</p><div class="card-route"><span>FROM TOKYO & KANSAI</span><strong>77 active routes worldwide</strong><a href="routes.html#tsuki" class="card-arrow" aria-label="Explore Tsuki Airways routes">↗</a></div></article>
+          <article class="airline-card card-orbit"><div class="card-top"><div class="airline-lockup"><span class="brand-mark orbit-mark" aria-hidden="true">◉</span><div class="airline-wordmark"><span>Tsuki</span><strong>Orbit</strong></div></div><span class="brand-role">CLOSER, WITH A NEW VIEW</span></div><p>Short and medium-haul hops that make getting there feel like part of the trip.</p><div class="card-route"><span>FROM KANSAI</span><strong>Seoul · Taipei · Sapporo</strong><a href="#journey" class="card-arrow" data-prefill="orbit" aria-label="Search Tsuki Orbit flights">↗</a></div></article>
+          <article class="airline-card card-pacifica"><div class="card-top"><div class="airline-lockup"><span class="brand-mark pacifica-mark" aria-hidden="true">✳</span><div class="airline-wordmark"><span>Grand Pacifica</span><strong>Air</strong></div></div><span class="brand-role">ACROSS THE BLUE</span></div><p>Trans-Pacific connections with room to breathe, from Japan to the American coast.</p><div class="card-route"><span>FROM KANSAI</span><strong>Hawaii · Canada · 11 U.S. cities</strong><a href="routes.html#pacifica" class="card-arrow" aria-label="Explore Grand Pacifica Air routes">↗</a></div></article>
+        </div>
+      </section>
+
+      <section class="sora-promo section-shell" aria-labelledby="sora-promo-title">
+        <div class="sora-promo-copy">
+          <span class="sora-kicker">ONE GROUP · THREE AIRLINES</span>
+          <h2 id="sora-promo-title">The more you fly,<br /><em>the further you belong.</em></h2>
+          <p>Discover Sora, the Nippon Pacific Group loyalty programme connecting Tsuki Airways, Tsuki Orbit, and Grand Pacifica Air.</p>
+          <a class="button button-dark" href="sora.html">Discover Sora <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="sora-promo-aside" aria-label="Sora is designed for all three airlines">
+          <span class="sora-promo-mark" aria-hidden="true">空</span>
+          <div class="sora-airline-list"><span><i class="tsuki-dot"></i>Tsuki Airways</span><span><i class="orbit-dot"></i>Tsuki Orbit</span><span><i class="pacifica-dot"></i>Grand Pacifica Air</span></div>
+          <small>Member benefits across three airlines</small>
+        </div>
+      </section>
+
+      <section class="journeys-promo section-shell" aria-labelledby="journeys-promo-title">
+        <div class="journeys-promo-copy">
+          <div class="eyebrow"><span class="eyebrow-line"></span> A TSUKI AIRWAYS EXPERIENCE</div>
+          <h2 id="journeys-promo-title">The journey is<br /><em>part of the story.</em></h2>
+          <p>Thoughtfully planned trips pair Tsuki flights with a place to stay, easy transfers, and days worth remembering.</p>
+          <div class="journeys-destination-list"><span>Traditional Japan</span><i>·</i><span>Dubai</span><i>·</i><span>Singapore</span><i>·</i><span>Europe</span></div>
+          <a class="button button-dark" href="journeys.html">Discover Tsuki: Journeys <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="journeys-promo-art" aria-hidden="true"><img class="journeys-promo-map" src="journey-routes-map.svg" alt="" /></div>
+      </section>
+
+      <section class="collection-links section-shell" aria-label="Explore airline information">
+        <a class="collection-card collection-routes" href="routes.html">
+          <span class="collection-icon" aria-hidden="true">⌁</span><span class="collection-kicker">THE NETWORK</span>
+          <strong>Explore route maps</strong><span>Choose an airline and follow its routes around the world.</span><b>View routes <i aria-hidden="true">↗</i></b>
+        </a>
+        <a class="collection-card collection-fleet" href="fleet.html">
+          <span class="collection-icon" aria-hidden="true">✈</span><span class="collection-kicker">THE AIRCRAFT</span>
+          <strong>Meet the fleet</strong><span>See the aircraft serving each Nippon Pacific airline.</span><b>View fleet <i aria-hidden="true">↗</i></b>
+        </a>
+      </section>
+
+      <section class="closing-note section-shell"><span class="closing-symbol" aria-hidden="true">✳</span><p>From the first hello to the last horizon.<br /><em>We’re glad you’re here.</em></p><a href="#journey" aria-label="Return to flight search">↑</a></section>
+    </main>
+
+    <footer class="site-footer"><div class="footer-main section-shell"><a class="brand-lockup footer-brand" href="#top"><img src="assets/npg-mark.svg" onerror="this.onerror=null;this.src='npg-mark.svg'" alt="" width="38" height="38" /><span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span></a><p>Thoughtful journeys across Japan, the Pacific, and beyond.</p><div class="footer-links"><a href="#airlines">Airlines</a><a href="sora.html">Discover Sora</a><a href="journeys.html">Tsuki: Journeys</a><a href="routes.html">Routes</a><a href="fleet.html">Fleet</a><a href="#journey">Find a flight</a></div></div><div class="footer-bottom section-shell"><span>© 2026 Nippon Pacific Group</span><span class="service-note">Schedules and seat availability are not live; reservations and payments are not processed here.</span><a href="#top">Back to top ↑</a></div></footer>
+
+    <dialog class="booking-dialog" id="booking-dialog" aria-labelledby="dialog-title">
+      <button class="dialog-close" type="button" aria-label="Close booking dialog">×</button>
+      <div id="dialog-content"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <dialog class="site-settings-dialog" id="site-settings-dialog" aria-labelledby="site-settings-title">
+      <button class="settings-close" type="button" aria-label="Close settings">×</button>
+      <div class="settings-heading"><span class="settings-kicker">A LITTLE PERSONAL COMFORT</span><h2 id="site-settings-title">Make yourself at home.</h2><p>Your preferences stay in this browser.</p></div>
+      <div class="settings-options">
+        <label class="settings-option" for="setting-dark-mode"><span><strong>Dark mode</strong><small>A softer, darker palette for every page.</small></span><input id="setting-dark-mode" type="checkbox" role="switch" /></label>
+        <label class="settings-option" for="setting-animations"><span><strong>Animations</strong><small>Turn movement and transitions on or off.</small></span><input id="setting-animations" type="checkbox" role="switch" /></label>
+      </div>
+      <section class="stress-relief" aria-labelledby="stress-relief-title"><span class="settings-kicker" id="stress-relief-title">EXTREMELY IMPORTANT SETTING</span><button id="stress-relief-button" class="stress-relief-button" type="button">Press for stress relief ✦</button><p id="stress-relief-message" aria-live="polite">No practical effect. Vibes may improve.</p></section>
+    </dialog>
+  </body>
+</html>

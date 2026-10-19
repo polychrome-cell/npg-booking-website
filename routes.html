@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f4ef" />
+    <meta name="description" content="Explore Nippon Pacific Group airline routes on full-world maps." />
+    <title>Airline Route Maps — Nippon Pacific Group</title>
+    <link rel="icon" type="image/svg+xml" href="assets/npg-mark.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=20261019-seat-and-schedule2" />
+    <script src="settings.js?v=20261018-sora1" defer></script>
+    <script src="app.js?v=20261019-seat-and-schedule2" defer></script>
+    <script src="site-pages.js?v=20261019-seat-and-schedule2" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand-lockup" href="index.html#top" aria-label="Nippon Pacific Group home">
+        <img src="assets/npg-mark.svg" alt="" width="40" height="40" />
+        <span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span></button>
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+        <a href="index.html#journey">Plan a journey</a><a href="index.html#airlines">Our airlines</a><a href="sora.html">Discover Sora</a><a href="journeys.html">Tsuki: Journeys</a><a href="routes.html" aria-current="page">Routes</a><a href="fleet.html">Fleet</a>
+      </nav>
+      <div class="header-actions"><button class="settings-trigger" id="settings-trigger" type="button" aria-label="Open settings" aria-haspopup="dialog" aria-controls="site-settings-dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.31.06-.62.06-.94s-.02-.63-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.28 7.28 0 0 0-1.63-.94l-.36-2.54A.48.48 0 0 0 13.88 2h-3.84a.48.48 0 0 0-.49.42l-.36 2.54c-.59.23-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.61.22L2.64 8.48a.5.5 0 0 0 .12.64l2.03 1.58a7.5 7.5 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .61.22l2.39-.96c.5.39 1.04.71 1.63.94l.36 2.54c.04.25.25.43.5.43h3.84c.25 0 .46-.18.5-.43l.36-2.54c.59-.23 1.13-.55 1.63-.94l2.39.96a.5.5 0 0 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.02-1.58ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" /></svg></button><a class="header-cta" href="index.html#journey">Find a flight <span aria-hidden="true">↗</span></a></div>
+    </header>
+
+    <main id="routes-page" class="network-section route-page">
+      <div class="route-page-shell section-shell">
+        <div class="route-page-heading">
+          <div class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> THE NPG NETWORK</div>
+          <h1>One world.<br /><em>Three ways to cross it.</em></h1>
+          <p>Choose an airline to explore its network. Select a route or map marker to bring the two together.</p>
+        </div>
+        <div class="route-airline-choices" role="group" aria-label="Choose an airline route map">
+          <button class="route-airline-choice is-active" type="button" data-airline-map="pacifica" aria-pressed="true"><span class="choice-mark pacifica-mark" aria-hidden="true">✳</span><span><strong>Grand Pacifica Air</strong><small>Trans-Pacific</small></span></button>
+          <button class="route-airline-choice" type="button" data-airline-map="tsuki" aria-pressed="false"><span class="choice-mark tsuki-mark" aria-hidden="true">月</span><span><strong>Tsuki Airways</strong><small>Long-haul</small></span></button>
+          <button class="route-airline-choice" type="button" data-airline-map="orbit" aria-pressed="false"><span class="choice-mark orbit-mark" aria-hidden="true">◉</span><span><strong>Tsuki Orbit</strong><small>Osaka · 23 routes</small></span></button>
+        </div>
+
+        <section class="network-map-card route-map-card" aria-labelledby="route-map-title">
+          <div class="network-card-heading">
+            <div><span class="network-kicker">FULL WORLD · PACIFIC-CENTERED</span><h2 id="route-map-title">Grand Pacifica Air routes</h2></div>
+            <span id="route-map-badge" class="network-badge"><i></i> Grand Pacifica Air</span>
+          </div>
+          <div id="route-map" class="pacifica-map" aria-label="Full-world route map"></div>
+          <div class="map-key"><span><i class="key-line"></i> Route</span><span><i class="origin-key"></i> Departure airport</span></div>
+        </section>
+
+        <div class="route-page-list-heading">
+          <div><span class="network-kicker">THE ROUTE BOOK</span><h2 id="route-list-title">From Kansai to the Pacific</h2></div>
+          <p id="route-list-description">Explore route distances and weekly service. Schedules shown here are illustrative and do not represent live availability.</p>
+        </div>
+        <div class="route-page-tools">
+          <label class="tsuki-route-search"><span aria-hidden="true">⌕</span><input id="route-search" type="search" placeholder="Search city or airport code" aria-label="Search routes" /></label>
+          <label class="tsuki-origin-select"><span>FROM</span><select id="route-origin-filter" aria-label="Filter routes by departure airport"><option value="all">All departure airports</option></select></label>
+          <span id="route-count" class="tsuki-route-count" aria-live="polite"></span>
+        </div>
+        <div id="route-cards" class="pacifica-routes route-page-cards" aria-label="Selected airline routes"></div>
+        <p id="route-empty" class="tsuki-route-empty" hidden>No routes match those filters.</p>
+        <p class="network-disclaimer">Route maps show the airline networks. Schedule frequencies are planning information and are not live.</p>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="footer-main section-shell"><a class="brand-lockup footer-brand" href="index.html#top"><img src="assets/npg-mark.svg" alt="" width="38" height="38" /><span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span></a><p>Thoughtful journeys across Japan, the Pacific, and beyond.</p><div class="footer-links"><a href="index.html#airlines">Airlines</a><a href="sora.html">Discover Sora</a><a href="journeys.html">Tsuki: Journeys</a><a href="routes.html">Routes</a><a href="fleet.html">Fleet</a><a href="index.html#journey">Find a flight</a></div></div><div class="footer-bottom section-shell"><span>© 2026 Nippon Pacific Group</span><span class="service-note">Schedules and seat availability are not live; reservations and payments are not processed here.</span><a href="index.html#top">Back to top ↑</a></div></footer>
+    <dialog class="site-settings-dialog" id="site-settings-dialog" aria-labelledby="site-settings-title">
+      <button class="settings-close" type="button" aria-label="Close settings">×</button>
+      <div class="settings-heading"><span class="settings-kicker">A LITTLE PERSONAL COMFORT</span><h2 id="site-settings-title">Make yourself at home.</h2><p>Your preferences stay in this browser.</p></div>
+      <div class="settings-options"><label class="settings-option" for="setting-dark-mode"><span><strong>Dark mode</strong><small>A softer, darker palette for every page.</small></span><input id="setting-dark-mode" type="checkbox" role="switch" /></label><label class="settings-option" for="setting-animations"><span><strong>Animations</strong><small>Turn movement and transitions on or off.</small></span><input id="setting-animations" type="checkbox" role="switch" /></label></div>
+      <section class="stress-relief" aria-labelledby="stress-relief-title"><span class="settings-kicker" id="stress-relief-title">EXTREMELY IMPORTANT SETTING</span><button id="stress-relief-button" class="stress-relief-button" type="button">Press for stress relief ✦</button><p id="stress-relief-message" aria-live="polite">No practical effect. Vibes may improve.</p></section>
+    </dialog>
+  </body>
+</html>
