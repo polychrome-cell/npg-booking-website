@@ -1,4 +1,17 @@
 (() => {
+  // Clear legacy browser-only Sora progress once when the account-enabled release
+  // is first opened from a hosted site. Keep this out of file:// previews.
+  const RELEASE_RESET_KEY = "npg-sora-release-reset";
+  const RELEASE_RESET_VERSION = "account-rollout-2026-10";
+  try {
+    if (/^https?:$/.test(window.location.protocol) && window.localStorage.getItem(RELEASE_RESET_KEY) !== RELEASE_RESET_VERSION) {
+      window.localStorage.removeItem("npg-sora-demo-profiles-v1");
+      window.localStorage.removeItem("npg-sora-demo-wallet-v1");
+      window.localStorage.setItem(RELEASE_RESET_KEY, RELEASE_RESET_VERSION);
+    }
+  } catch {
+    // Storage may be unavailable; continue without blocking the Sora page.
+  }
   const STORAGE_KEY = "npg-sora-demo-profiles-v1";
   const LEGACY_WALLET_KEY = "npg-sora-demo-wallet-v1";
   const POINTS_PER_DOLLAR = 100;
@@ -11,6 +24,8 @@
   let storageAvailable = true;
   let db = readDatabase();
   let pendingAction = null;
+  let authUser = null;
+  let infiniteApplicationStatus = "SignedOut";
 
   function emptyWallet() {
     return { balance: 0, activity: [] };
@@ -103,7 +118,9 @@
   }
 
   function activeProfileRecord() {
-    return db.profiles.find((profile) => profile.id === db.activeProfileId) || null;
+    if (!authUser?.email) return null;
+    const profile = db.profiles.find((item) => item.id === db.activeProfileId) || null;
+    return profile && profile.email.toLowerCase() === authUser.email.toLowerCase() ? profile : null;
   }
 
   function publicProfile(profile) {
@@ -112,7 +129,12 @@
     const earnedRank = profile.lifetimePoints >= 100000 ? 2 : profile.lifetimePoints >= 10000 ? 1 : 0;
     const redeemedRank = statusPointTiers[profile.purchasedStatusTier]?.rank || 0;
     const statusRank = Math.max(earnedRank, redeemedRank);
-    const status = statusRank >= 2 ? "Platinum" : statusRank === 1 ? "Gold" : "Member";
+    const isApprovedInfinite = Boolean(
+      authUser?.email
+      && authUser.email.toLowerCase() === profile.email.toLowerCase()
+      && infiniteApplicationStatus === "Approved"
+    );
+    const status = isApprovedInfinite ? "Infinite" : statusRank >= 2 ? "Platinum" : statusRank === 1 ? "Gold" : "Member";
     return {
       id: profile.id,
       name: profile.name,
@@ -122,6 +144,7 @@
       lifetimePoints: profile.lifetimePoints || 0,
       cabinBookingsYear: { ...(profile.cabinBookingsYear || {}) },
       infiniteInterestRequestedAt: profile.infiniteInterestRequestedAt || null,
+      infiniteInterestSubmittedAt: profile.infiniteInterestSubmittedAt || null,
     };
   }
 
@@ -168,50 +191,121 @@
   async function createProfile({ name, email, password } = {}) {
     const cleanName = String(name || "").trim().slice(0, 40);
     const cleanEmail = String(email || "").trim().toLowerCase();
-    if (!cleanName) return { ok: false, message: "Enter a name for this browser profile." };
-    if (!/^[^\s@]+@(?:example\.test|npg\.invalid)$/i.test(cleanEmail)) return { ok: false, message: "Use a placeholder email ending in .test or .invalid." };
-    if (!/^npg-[A-Za-z0-9_-]{4,}$/.test(String(password || ""))) return { ok: false, message: "For safety, use a placeholder password beginning with npg-." };
-    refreshDatabase();
-    if (db.profiles.some((profile) => profile.email.toLowerCase() === cleanEmail)) return { ok: false, message: "That email already has a profile. Sign in or use another placeholder email." };
-    const salt = randomHex();
-    const profile = {
-      id: randomHex(12), name: cleanName, email: cleanEmail, salt,
-      passwordDigest: await passwordDigest(String(password), salt),
-      balance: db.profiles.length === 0 ? db.guest.balance : 0,
-      activity: db.profiles.length === 0 ? db.guest.activity : [],
-      lifetimePoints: db.profiles.length === 0 ? Math.max(db.guest.balance, db.guest.activity.reduce((sum, entry) => sum + Math.max(0, Number(entry.delta) || 0), 0)) : 0,
-      loyaltyYear: new Date().getFullYear(),
-      cabinBookingsYear: Object.fromEntries(cabinKeys.map((key) => [key, 0])),
-      tier: null,
-      tierActivatedAt: null,
-      purchasedStatusTier: null,
-      infiniteInterestRequestedAt: null,
-    };
-    db.profiles.push(profile);
-    db.activeProfileId = profile.id;
-    if (db.profiles.length === 1) db.guest = emptyWallet();
-    const saved = saveDatabase();
-    notifyChange();
-    return { ok: true, profile: publicProfile(profile), saved };
+    if (!cleanName) return { ok: false, message: "Enter your name." };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) return { ok: false, message: "Enter a valid email address." };
+    if (String(password || "").length < 8) return { ok: false, message: "Use a password with at least 8 characters." };
+    if (!window.NPGSoraAuth?.signUp) return { ok: false, message: "Account sign-in is not connected yet." };
+    const result = await window.NPGSoraAuth.signUp({ name: cleanName, email: cleanEmail, password });
+    if (!result.ok || result.needsEmailConfirmation) return result;
+    const profile = await adoptAuthenticatedUser(result.user);
+    return { ok: true, profile, saved: true };
   }
 
   async function signIn({ email, password } = {}) {
-    const cleanEmail = String(email || "").trim().toLowerCase();
+    if (!window.NPGSoraAuth?.signIn) return { ok: false, message: "Account sign-in is not connected yet." };
+    const result = await window.NPGSoraAuth.signIn({ email, password });
+    if (!result.ok) return result;
+    const profile = await adoptAuthenticatedUser(result.user);
+    return { ok: true, profile, saved: true };
+  }
+
+  async function signOut() {
+    if (!window.NPGSoraAuth?.signOut) return { ok: false, message: "Account sign-in is not connected yet." };
+    const result = await window.NPGSoraAuth.signOut();
+    if (!result.ok) return result;
+    clearAuthenticatedUser();
+    return { ok: true };
+  }
+
+  function ensureLocalProfile(user) {
+    const email = String(user?.email || "").trim().toLowerCase();
+    if (!email || !user?.id || !user.email_confirmed_at) return null;
     refreshDatabase();
-    const profile = db.profiles.find((item) => item.email.toLowerCase() === cleanEmail);
-    if (!profile || await passwordDigest(String(password || ""), profile.salt) !== profile.passwordDigest) {
-      return { ok: false, message: "That email and password do not match a saved profile." };
+    let profile = db.profiles.find((item) => item.email.toLowerCase() === email);
+    if (profile) {
+      profile.authUserId = user.id;
+      if (!profile.name && user.user_metadata?.full_name) profile.name = String(user.user_metadata.full_name).slice(0, 40);
+    } else {
+      const name = String(user.user_metadata?.full_name || email.split("@")[0] || "Sora member").slice(0, 40);
+      profile = {
+        id: user.id,
+        authUserId: user.id,
+        name,
+        email,
+        balance: db.profiles.length === 0 ? db.guest.balance : 0,
+        activity: db.profiles.length === 0 ? db.guest.activity : [],
+        lifetimePoints: db.profiles.length === 0 ? Math.max(db.guest.balance, db.guest.activity.reduce((sum, entry) => sum + Math.max(0, Number(entry.delta) || 0), 0)) : 0,
+        loyaltyYear: new Date().getFullYear(),
+        cabinBookingsYear: Object.fromEntries(cabinKeys.map((key) => [key, 0])),
+        tier: null,
+        tierActivatedAt: null,
+        purchasedStatusTier: null,
+        infiniteInterestRequestedAt: null,
+      };
+      db.profiles.push(profile);
+      if (db.profiles.length === 1) db.guest = emptyWallet();
     }
     db.activeProfileId = profile.id;
-    const saved = saveDatabase();
+    saveDatabase();
+    return profile;
+  }
+
+  function clearAuthenticatedUser() {
+    authUser = null;
+    infiniteApplicationStatus = "SignedOut";
+    db.activeProfileId = null;
+    saveDatabase();
     notifyChange();
-    return { ok: true, profile: publicProfile(profile), saved };
+  }
+
+  async function refreshInfiniteApplicationStatus() {
+    const userId = authUser?.id;
+    if (!userId || !window.NPGSoraAuth?.getInfiniteStatus) return;
+    const decision = await window.NPGSoraAuth.getInfiniteStatus();
+    if (authUser?.id !== userId) return;
+    infiniteApplicationStatus = decision.ok ? decision.status : "Unavailable";
+    notifyChange();
+  }
+
+  async function adoptAuthenticatedUser(user) {
+    if (!user?.email_confirmed_at) return null;
+    authUser = user;
+    infiniteApplicationStatus = "Checking";
+    const profile = ensureLocalProfile(user);
+    if (!profile) {
+      clearAuthenticatedUser();
+      return null;
+    }
+    await refreshInfiniteApplicationStatus();
+    return publicProfile(profile);
+  }
+
+  async function restoreAuthentication() {
+    if (!window.NPGSoraAuth?.configured) {
+      infiniteApplicationStatus = "Unavailable";
+      notifyChange();
+      return;
+    }
+    window.NPGSoraAuth.onAuthStateChange((event, user) => {
+      if (event === "SIGNED_OUT" || !user) {
+        clearAuthenticatedUser();
+        return;
+      }
+      void adoptAuthenticatedUser(user);
+    });
+    const current = await window.NPGSoraAuth.getVerifiedUser();
+    if (current.user) await adoptAuthenticatedUser(current.user);
+    else {
+      authUser = null;
+      infiniteApplicationStatus = "SignedOut";
+      notifyChange();
+    }
   }
 
   function activateTier(tier) {
     const plan = allowedTiers[tier];
     const profile = activeProfileRecord();
-    if (!plan || !profile) return { ok: false, message: "Create or select a browser profile first." };
+    if (!plan || !profile) return { ok: false, message: "Create an account or sign in first." };
     if (profile.tier === tier) return { ok: true, alreadyActive: true, plan };
     profile.tier = tier;
     profile.tierActivatedAt = new Date().toISOString();
@@ -223,9 +317,9 @@
   function purchaseStatusTier(tier) {
     const offer = statusPointTiers[tier];
     const profile = activeProfileRecord();
-    if (!offer || !profile) return { ok: false, message: "Create or select a browser profile first." };
+    if (!offer || !profile) return { ok: false, message: "Create an account or sign in first." };
     const currentStatus = publicProfile(profile).status;
-    const currentRank = currentStatus === "Platinum" ? 2 : currentStatus === "Gold" ? 1 : 0;
+    const currentRank = currentStatus === "Infinite" ? 3 : currentStatus === "Platinum" ? 2 : currentStatus === "Gold" ? 1 : 0;
     if (currentRank >= offer.rank) return { ok: true, alreadyActive: true, offer };
     if (profile.balance < offer.points) {
       return { ok: false, message: `You need ${(offer.points - profile.balance).toLocaleString("en-US")} more Sora Points to redeem ${offer.name}.` };
@@ -239,16 +333,30 @@
     return { ok: true, offer, balance: profile.balance, saved };
   }
 
-  function requestInfiniteInterest() {
+  async function requestInfiniteInterest({ name, email, consent } = {}) {
     const profile = activeProfileRecord();
-    if (!profile) return { ok: false, message: "Create or select a browser profile first." };
+    if (!profile || !authUser?.email) return { ok: false, message: "Create an account or sign in with a verified email first." };
+    if (infiniteApplicationStatus === "Approved") return { ok: false, message: "Sora Infinite is already active on this account." };
+    if (String(email || "").trim().toLowerCase() !== authUser.email.toLowerCase()) return { ok: false, message: "Use the verified email address on your signed-in Sora account." };
     const status = publicProfile(profile).status;
     if (status !== "Gold" && status !== "Platinum") return { ok: false, message: "Sora Infinite consideration is for Gold or Platinum members. Earn 10,000 lifetime Sora Points to reach Gold." };
-    if (profile.infiniteInterestRequestedAt) return { ok: true, alreadyRequested: true };
-    profile.infiniteInterestRequestedAt = new Date().toISOString();
+    if (profile.infiniteInterestSubmittedAt) return { ok: true, alreadyRequested: true };
+    if (!window.NPGInfiniteSignups?.submitInfiniteInterest) return { ok: false, message: "The online interest list is not connected yet. Please try again later." };
+    const submission = await window.NPGInfiniteSignups.submitInfiniteInterest({
+      name,
+      email,
+      status,
+      lifetimePoints: profile.lifetimePoints,
+      consent,
+    });
+    if (!submission.ok) return submission;
+    profile.infiniteInterestSubmittedAt = new Date().toISOString();
+    profile.infiniteInterestRequestedAt = profile.infiniteInterestRequestedAt || profile.infiniteInterestSubmittedAt;
+    const decision = await window.NPGSoraAuth.getInfiniteStatus();
+    if (decision.ok) infiniteApplicationStatus = decision.status;
     const saved = saveDatabase();
     notifyChange();
-    return { ok: true, saved };
+    return { ok: true, saved, alreadyOnList: submission.alreadyOnList };
   }
 
   function completeBooking({ fareAmount, pointsUsed = 0, cabin, airline, from, to, reference, seatSegments = [] } = {}) {
@@ -305,8 +413,8 @@
     const profile = wallet.profile;
     if (balanceOutput) balanceOutput.textContent = wallet.balance.toLocaleString("en-US");
     if (accountSummary) accountSummary.textContent = profile
-      ? `Signed in on this browser · ${profile.name} (${profile.email}) · ${profile.status} · ${profile.lifetimePoints.toLocaleString("en-US")} lifetime points${profile.tier ? ` · ${allowedTiers[profile.tier]?.name || profile.tier}` : ""}`
-      : "No profile is active. Create or sign in to keep points with a profile.";
+      ? `Verified account · ${profile.name} (${profile.email}) · ${profile.status} · ${profile.lifetimePoints.toLocaleString("en-US")} lifetime points${profile.tier ? ` · ${allowedTiers[profile.tier]?.name || profile.tier}` : ""}`
+      : "Create an account or sign in to keep your Sora profile on this device.";
     const loyaltyOutput = document.querySelector("#sora-wallet-loyalty");
     if (loyaltyOutput) {
       if (!profile) loyaltyOutput.textContent = "Each cabin has its own yearly flight count and bonus. Sign in to track them.";
@@ -345,13 +453,13 @@
     }
     if (disclaimer) {
       disclaimer.textContent = storageAvailable
-        ? "Profiles, balances, and activity are stored in this browser only. This page does not create accounts, tickets, payments, or rewards."
+        ? "Your account uses verified email sign-in. Points and flight activity are stored in this browser and do not sync to other devices."
         : "Browser storage is unavailable. Profile and points changes may not persist after this page is closed.";
     }
     const currentCopy = document.querySelector("#sora-profile-current-copy");
     const continueButton = document.querySelector("#sora-profile-continue");
     const currentBox = document.querySelector("#sora-profile-current");
-    if (currentCopy && profile) currentCopy.textContent = `You are signed in as ${profile.name} (${profile.email}). This profile is remembered in this browser.`;
+    if (currentCopy && profile) currentCopy.textContent = `Signed in as ${profile.name} (${profile.email}). Account status: ${profile.status}${infiniteApplicationStatus === "Pending" ? " · Infinite application pending" : ""}.`;
     if (continueButton) continueButton.textContent = pendingAction ? "Continue" : "Keep using this profile";
     if (currentBox) currentBox.hidden = !profile;
     document.querySelectorAll("[data-sora-tier-purchase]").forEach((button) => {
@@ -362,7 +470,7 @@
     document.querySelectorAll("[data-sora-status-purchase]").forEach((button) => {
       const tier = button.dataset.soraStatusPurchase;
       const offer = statusPointTiers[tier];
-      const rank = profile?.status === "Platinum" ? 2 : profile?.status === "Gold" ? 1 : 0;
+      const rank = profile?.status === "Infinite" ? 3 : profile?.status === "Platinum" ? 2 : profile?.status === "Gold" ? 1 : 0;
       if (!profile) {
         button.textContent = `Sign in to buy · ${offer.points.toLocaleString("en-US")} points`;
         button.disabled = false;
@@ -378,18 +486,39 @@
       }
     });
     const infiniteButton = document.querySelector("[data-sora-infinite-interest]");
-    if (infiniteButton && profile?.infiniteInterestRequestedAt) {
-      infiniteButton.textContent = "Interest request recorded";
+    const infiniteEligibility = document.querySelector("#sora-infinite-eligibility");
+    if (infiniteButton && infiniteApplicationStatus === "Approved") {
+      infiniteButton.textContent = "Sora Infinite active";
       infiniteButton.disabled = true;
-      document.querySelector("#sora-infinite-eligibility").textContent = "Your interest is saved to this browser profile; it is not an invitation.";
+      if (infiniteEligibility) infiniteEligibility.textContent = "Your application is approved. Sora Infinite is active on this verified account.";
+    } else if (infiniteButton && infiniteApplicationStatus === "Pending") {
+      infiniteButton.textContent = "Application pending";
+      infiniteButton.disabled = true;
+      if (infiniteEligibility) infiniteEligibility.textContent = "NPG has received your application and is reviewing it.";
+    } else if (infiniteButton && infiniteApplicationStatus === "Declined") {
+      infiniteButton.textContent = "Application reviewed";
+      infiniteButton.disabled = true;
+      if (infiniteEligibility) infiniteEligibility.textContent = "Your application has been reviewed. Contact NPG if you have questions.";
+    } else if (infiniteButton && infiniteApplicationStatus === "Unavailable") {
+      infiniteButton.textContent = "Status check unavailable";
+      infiniteButton.disabled = true;
+      if (infiniteEligibility) infiniteEligibility.textContent = "The Sora account database update is needed before status can be checked.";
+    } else if (infiniteButton && !authUser) {
+      const listConnected = window.NPGInfiniteSignups?.isConfigured() === true;
+      infiniteButton.textContent = "Sign in to check eligibility";
+      infiniteButton.disabled = !listConnected;
+      if (infiniteEligibility) infiniteEligibility.textContent = "Create or sign in to a verified Sora account to apply and check your decision.";
     } else if (infiniteButton && profile && profile.status !== "Gold" && profile.status !== "Platinum") {
       infiniteButton.textContent = "Reach Sora Gold to be eligible";
       infiniteButton.disabled = true;
-      document.querySelector("#sora-infinite-eligibility").textContent = `${profile.lifetimePoints.toLocaleString("en-US")} lifetime points · Gold starts at 10,000.`;
+      if (infiniteEligibility) infiniteEligibility.textContent = `${profile.lifetimePoints.toLocaleString("en-US")} lifetime points · Gold starts at 10,000.`;
     } else if (infiniteButton) {
-      infiniteButton.textContent = "Sign up for consideration";
-      infiniteButton.disabled = false;
-      document.querySelector("#sora-infinite-eligibility").textContent = profile ? `${profile.status} status · interest does not guarantee an invitation.` : "Gold or Platinum members may register interest.";
+      const listConnected = window.NPGInfiniteSignups?.isConfigured() === true;
+      infiniteButton.textContent = listConnected ? "Sign up for consideration" : "Registration opening soon";
+      infiniteButton.disabled = !listConnected;
+      if (infiniteEligibility) infiniteEligibility.textContent = listConnected
+        ? `${profile?.status || "Gold or Platinum"} status · applications use your verified account email.`
+        : "Interest registration is not connected yet.";
     }
   }
 
@@ -417,6 +546,8 @@
     const title = document.querySelector("#sora-action-title");
     const copy = document.querySelector("#sora-action-copy");
     const confirm = document.querySelector("#sora-action-confirm");
+    const infiniteFields = document.querySelector("#sora-infinite-fields");
+    if (infiniteFields) infiniteFields.hidden = true;
     confirm.disabled = false;
     if (action.type === "tier") {
       const plan = allowedTiers[action.tier];
@@ -433,15 +564,30 @@
     } else {
       const profile = getActiveProfile();
       title.textContent = "Sora Infinite invitation interest";
-      if (profile && profile.status !== "Gold" && profile.status !== "Platinum") {
+      if (!authUser) {
+        copy.textContent = "Sign in with a verified Sora account to apply. If NPG approves your application, Infinite status will appear on this account.";
+        confirm.textContent = "Sign in required";
+        confirm.disabled = true;
+        confirm.dataset.action = "";
+      } else if (infiniteApplicationStatus === "Approved") {
+        copy.textContent = "Sora Infinite is already active on this verified account.";
+        confirm.textContent = "Infinite active";
+        confirm.disabled = true;
+        confirm.dataset.action = "";
+      } else if (profile && profile.status !== "Gold" && profile.status !== "Platinum") {
         copy.textContent = `This profile has ${profile.lifetimePoints.toLocaleString("en-US")} lifetime points and is currently ${profile.status}. Reach 10,000 lifetime points for Gold before signing up for consideration.`;
         confirm.textContent = "Gold or Platinum required";
         confirm.disabled = true;
         confirm.dataset.action = "";
       } else {
-        copy.textContent = "Your interest will be recorded on this browser profile. It does not grant Infinite status or guarantee an invitation; only Sora Gold or Platinum members are eligible, and one eligible member is selected each year.";
+        copy.textContent = "Submit your details using the verified email on your account. NPG reviews the application; approval activates Infinite on this account.";
         confirm.textContent = "Sign up for consideration";
         confirm.dataset.action = "infinite";
+        if (infiniteFields) infiniteFields.hidden = false;
+        const nameInput = document.querySelector("#sora-infinite-name");
+        if (nameInput && !nameInput.value) nameInput.value = profile?.name || "";
+        const emailInput = document.querySelector("#sora-infinite-email");
+        if (emailInput) emailInput.value = authUser.email || "";
       }
     }
     const actionStatus = document.querySelector("#sora-action-message");
@@ -454,10 +600,19 @@
     if (!profileDialog) return;
     document.querySelector("#sora-account-manage")?.addEventListener("click", () => showProfileDialog());
     document.querySelector("#sora-profile-continue")?.addEventListener("click", runPendingAction);
-    document.querySelector("#sora-profile-more")?.addEventListener("click", () => {
+    document.querySelector("#sora-profile-more")?.addEventListener("click", async () => {
+      const result = await signOut();
+      if (!result.ok) {
+        const status = document.querySelector("#sora-profile-message");
+        if (status) status.textContent = result.message;
+        return;
+      }
       document.querySelector("#sora-profile-forms")?.classList.add("is-open");
-      document.querySelector("#sora-profile-create")?.toggleAttribute("hidden", true);
+      document.querySelector("#sora-profile-create")?.toggleAttribute("hidden", false);
       document.querySelector("#sora-profile-signin")?.toggleAttribute("hidden", true);
+      document.querySelectorAll("[data-sora-profile-mode]").forEach((item) => item.setAttribute("aria-pressed", String(item.dataset.soraProfileMode === "create")));
+      const status = document.querySelector("#sora-profile-message");
+      if (status) status.textContent = "Signed out. Sign in to another account or create a new one.";
     });
     document.querySelectorAll("[data-sora-profile-mode]").forEach((button) => button.addEventListener("click", () => {
       document.querySelector("#sora-profile-forms")?.classList.add("is-open");
@@ -482,27 +637,37 @@
       if (getActiveProfile()) { pendingAction = action; runPendingAction(); }
       else showProfileDialog(action);
     });
-    document.querySelector("#sora-action-confirm")?.addEventListener("click", (event) => {
+    document.querySelector("#sora-action-confirm")?.addEventListener("click", async (event) => {
+      const confirmButton = event.currentTarget;
       const status = document.querySelector("#sora-action-message");
-      const action = event.currentTarget.dataset.action || "";
-      const result = action.startsWith("tier:")
-        ? activateTier(action.split(":")[1])
-        : action.startsWith("status:")
-          ? purchaseStatusTier(action.split(":")[1])
-          : requestInfiniteInterest();
+      const action = confirmButton.dataset.action || "";
+      let result;
+      if (action === "infinite") {
+        const nameInput = document.querySelector("#sora-infinite-name");
+        const emailInput = document.querySelector("#sora-infinite-email");
+        const consentInput = document.querySelector("#sora-infinite-consent");
+        if (!nameInput.reportValidity() || !emailInput.reportValidity() || !consentInput.reportValidity()) return;
+        confirmButton.disabled = true;
+        status.textContent = "Sending your request…";
+        result = await requestInfiniteInterest({ name: nameInput.value, email: emailInput.value, consent: consentInput.checked });
+      } else {
+        result = action.startsWith("tier:")
+          ? activateTier(action.split(":")[1])
+          : purchaseStatusTier(action.split(":")[1]);
+      }
       if (!result.ok) {
         status.textContent = result.message || "Please try again.";
+        confirmButton.disabled = false;
         return;
       }
-      status.textContent = result.alreadyActive
-        ? `${result.offer?.name || "This membership"} is already active on this profile.`
-        : result.alreadyRequested
-          ? "Your interest is already recorded for this profile."
-          : action.startsWith("tier:")
-            ? "Membership selection saved to this browser profile. No payment was processed."
-            : action.startsWith("status:")
-              ? `${result.offer.name} purchased. ${result.offer.points.toLocaleString("en-US")} Sora Points were used from your balance.`
-              : "Your interest request is recorded. An invitation is not guaranteed.";
+      if (result.alreadyActive) status.textContent = `${result.offer?.name || "This membership"} is already active on this profile.`;
+      else if (result.alreadyRequested) status.textContent = "Your interest is already recorded for this profile.";
+      else if (action === "infinite") status.textContent = result.alreadyOnList
+        ? "An application for this verified email is already on file."
+        : "Application submitted. You can check the decision here after NPG reviews it.";
+      else if (action.startsWith("tier:")) status.textContent = "Membership selection saved to this browser profile. No payment was processed.";
+      else if (action.startsWith("status:")) status.textContent = `${result.offer.name} purchased. ${result.offer.points.toLocaleString("en-US")} Sora Points were used from your balance.`;
+      else status.textContent = "Please try again.";
       renderSoraWallet();
       window.setTimeout(() => document.querySelector("#sora-action-dialog")?.close(), 900);
     });
@@ -517,6 +682,10 @@
       const status = document.querySelector("#sora-profile-message");
       if (!result.ok) { status.textContent = result.message; return; }
       form.reset();
+      if (result.needsEmailConfirmation) {
+        status.textContent = result.message;
+        return;
+      }
       runPendingAction();
     });
     document.querySelector("#sora-profile-signin")?.addEventListener("submit", async (event) => {
@@ -539,6 +708,7 @@
     listProfiles,
     createProfile,
     signIn,
+    signOut,
     activateTier,
     purchaseStatusTier,
     requestInfiniteInterest,
@@ -546,6 +716,7 @@
   };
   renderSoraWallet();
   wireSoraControls();
+  void restoreAuthentication();
   window.addEventListener("sora-profile-updated", renderSoraWallet);
   window.addEventListener("storage", (event) => {
     if (event.key === STORAGE_KEY) {
@@ -553,4 +724,5 @@
       renderSoraWallet();
     }
   });
+  window.addEventListener("focus", () => { void refreshInfiniteApplicationStatus(); });
 })();
