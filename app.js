@@ -262,12 +262,13 @@ const pacificaFleet = [
 ];
 const tsukiFleet = [
   { type: "Boeing 787-9 Dreamliner", code: "B789", count: 65 },
+  { type: "Boeing 777-9", code: "B779", count: 20 },
   { type: "Boeing 787-8 Dreamliner", code: "B788", count: 17 },
-  { type: "Boeing 777-9", code: "B779", count: 16 },
 ];
 const orbitFleet = [
   { type: "Airbus A321neo", code: "A21N", count: 31 },
   { type: "Airbus A321XLR", code: "A21N", count: 10 },
+  { type: "ATR 72-600", code: "AT76", count: 5 },
 ];
 
 window.NPG_NETWORK_DATA = { airports, airportCoordinates, pacificaRoutes, pacificaFleet, tsukiRoutes, tsukiFleet, orbitRoutes, orbitFleet };
@@ -984,12 +985,12 @@ function renderRegistrationStep(mode = "welcome") {
       <div class="checkout-progress"><span class="is-current">01 · ACCOUNT</span><span>02 · PAYMENT</span><span>03 · SEATS</span></div>
       <div class="dialog-kicker">FLIGHT CHECKOUT · ACCOUNT</div>
       <h2 id="dialog-title">Welcome back, ${escapeHTML(profile.name)}.</h2>
-      <p class="dialog-intro">Your profile is saved in this browser.</p>
+      <p class="dialog-intro">Your verified Sora account is signed in. Points and flight activity remain on this device.</p>
       <div class="checkout-account-summary"><strong>${escapeHTML(profile.name)}</strong><span>${escapeHTML(profile.email)}</span></div>
       ${checkoutSummaryMarkup()}
       <button class="button button-red checkout-submit full-width" id="account-continue" type="button">Continue to payment <span aria-hidden="true">→</span></button>
-      <button class="checkout-link-button" id="account-choose-profile" type="button">Use another profile or add one</button>
-      <p class="checkout-safety">Profiles are stored in this browser. Use placeholder contact details only.</p>`;
+      <button class="checkout-link-button" id="account-choose-profile" type="button">Use another account</button>
+      <p class="checkout-safety">Your account uses verified email sign-in. This website does not process reservations or payments.</p>`;
     $("#account-continue").addEventListener("click", () => finishAccountStep(profile));
     $("#account-choose-profile").addEventListener("click", () => renderRegistrationStep("chooser"));
     return;
@@ -999,16 +1000,16 @@ function renderRegistrationStep(mode = "welcome") {
     const safeName = profile ? escapeHTML(profile.name) : "";
     dialogContent.innerHTML = `
       <div class="checkout-progress"><span class="is-current">01 · ACCOUNT</span><span>02 · PAYMENT</span><span>03 · SEATS</span></div>
-      <div class="dialog-kicker">FLIGHT CHECKOUT · PROFILES</div>
-      <h2 id="dialog-title">Choose a profile.</h2>
-      <p class="dialog-intro">Switch profiles or add another one. Each profile keeps its own Sora Points balance in this browser.</p>
+      <div class="dialog-kicker">FLIGHT CHECKOUT · SORA ACCOUNT</div>
+      <h2 id="dialog-title">Switch accounts.</h2>
+      <p class="dialog-intro">Sign out before creating or signing into another verified Sora account. Each account keeps a separate local points profile on this device.</p>
       ${profile ? `<button class="checkout-account-option" id="account-continue" type="button"><strong>Continue as ${safeName}</strong><span>${escapeHTML(profile.email)}</span></button>` : ""}
-      <div class="checkout-profile-actions"><button class="button button-red" id="account-add-profile" type="button">Add another profile</button><button class="button button-dark" id="account-switch-profile" type="button">Sign into a saved profile</button></div>
+      <div class="checkout-profile-actions"><button class="button button-red" id="account-add-profile" type="button">Create another account</button><button class="button button-dark" id="account-switch-profile" type="button">Sign into another account</button></div>
       <button class="checkout-link-button" id="account-back" type="button">Back</button>
-      <p class="checkout-safety">Profiles stay in this browser. Use example.test emails and unique placeholder passwords beginning with npg-.</p>`;
+      <p class="checkout-safety">Use an email address you can confirm. Points and activity remain on this device.</p>`;
     if (profile) $("#account-continue").addEventListener("click", () => finishAccountStep(profile));
-    $("#account-add-profile").addEventListener("click", () => renderRegistrationStep("create"));
-    $("#account-switch-profile").addEventListener("click", () => renderRegistrationStep("signin"));
+    $("#account-add-profile").addEventListener("click", async () => { await window.SoraWallet?.signOut(); renderRegistrationStep("create"); });
+    $("#account-switch-profile").addEventListener("click", async () => { await window.SoraWallet?.signOut(); renderRegistrationStep("signin"); });
     $("#account-back").addEventListener("click", () => renderRegistrationStep(profile ? "welcome" : "create"));
     return;
   }
@@ -1016,38 +1017,38 @@ function renderRegistrationStep(mode = "welcome") {
   if (mode === "signin") {
     dialogContent.innerHTML = `
       <div class="checkout-progress"><span class="is-current">01 · ACCOUNT</span><span>02 · PAYMENT</span><span>03 · SEATS</span></div>
-      <div class="dialog-kicker">FLIGHT CHECKOUT · SAVED PROFILE</div>
-      <h2 id="dialog-title">Sign in to your profile.</h2>
-      <p class="dialog-intro">Use the email and password saved with this browser profile.</p>
+      <div class="dialog-kicker">FLIGHT CHECKOUT · SORA ACCOUNT</div>
+      <h2 id="dialog-title">Sign in to your account.</h2>
+      <p class="dialog-intro">Use the verified email and password on your Sora account.</p>
       ${checkoutSummaryMarkup()}
       <form class="checkout-form" id="profile-signin-form" autocomplete="off">
-        <label class="checkout-field full-width" for="profile-signin-email">Email<input id="profile-signin-email" name="email" type="text" inputmode="email" autocomplete="off" required /></label>
-        <label class="checkout-field full-width" for="profile-signin-password">Password<input id="profile-signin-password" name="password" type="password" autocomplete="off" required /></label>
+        <label class="checkout-field full-width" for="profile-signin-email">Email<input id="profile-signin-email" name="email" type="email" autocomplete="email" required /></label>
+        <label class="checkout-field full-width" for="profile-signin-password">Password<input id="profile-signin-password" name="password" type="password" autocomplete="current-password" required /></label>
         <p id="registration-message" class="checkout-message full-width" role="status" aria-live="polite"></p>
         <button class="button button-red checkout-submit full-width" type="submit">Sign in and continue <span aria-hidden="true">→</span></button>
-        <button class="checkout-link-button full-width" id="account-add-profile" type="button">Create another profile</button>
-        <p class="checkout-safety full-width">Sign-in is stored in this browser and is not connected to an airline account service.</p>
+        <button class="checkout-link-button full-width" id="account-add-profile" type="button">Create an account</button>
+        <p class="checkout-safety full-width">Sora uses email confirmation. Points and flight activity remain on this device.</p>
       </form>`;
     $("#profile-signin-form").addEventListener("submit", continueWithSavedProfile);
-    $("#account-add-profile").addEventListener("click", () => renderRegistrationStep("create"));
+    $("#account-add-profile").addEventListener("click", async () => { await window.SoraWallet?.signOut(); renderRegistrationStep("create"); });
     $("#profile-signin-email").focus();
     return;
   }
 
   dialogContent.innerHTML = `
     <div class="checkout-progress"><span class="is-current">01 · ACCOUNT</span><span>02 · PAYMENT</span><span>03 · SEATS</span></div>
-    <div class="dialog-kicker">FLIGHT CHECKOUT · NEW PROFILE</div>
-    <h2 id="dialog-title">Create a profile.</h2>
-    <p class="dialog-intro">Create a profile to return to for future trips. Add other profiles any time.</p>
+    <div class="dialog-kicker">FLIGHT CHECKOUT · SORA ACCOUNT</div>
+    <h2 id="dialog-title">Create an account.</h2>
+    <p class="dialog-intro">Use an email address you can verify to create an account for future trips.</p>
     ${checkoutSummaryMarkup()}
     <form class="checkout-form" id="profile-create-form" autocomplete="off">
       <label class="checkout-field full-width" for="registration-name">Name<input id="registration-name" name="name" type="text" maxlength="40" placeholder="Traveler name" autocomplete="off" required /></label>
-      <label class="checkout-field full-width" for="registration-email">Email<input id="registration-email" name="email" type="text" inputmode="email" placeholder="traveler@example.test" autocomplete="off" spellcheck="false" required /></label>
-      <label class="checkout-field full-width" for="registration-password">Password<input id="registration-password" name="password" type="password" placeholder="Start with npg-" autocomplete="new-password" required /></label>
+      <label class="checkout-field full-width" for="registration-email">Email<input id="registration-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" spellcheck="false" required /></label>
+      <label class="checkout-field full-width" for="registration-password">Password<input id="registration-password" name="password" type="password" minlength="8" autocomplete="new-password" required /></label>
       <p id="registration-message" class="checkout-message full-width" role="status" aria-live="polite"></p>
-      <button class="button button-red checkout-submit full-width" type="submit">Save profile and continue <span aria-hidden="true">→</span></button>
-      <button class="checkout-link-button full-width" id="account-signin-existing" type="button">I already have a saved profile</button>
-      <p class="checkout-safety full-width">Use an example.test email and a unique placeholder password beginning with npg-. Profile information stays in this browser. This site does not process reservations or payments.</p>
+      <button class="button button-red checkout-submit full-width" type="submit">Create account and continue <span aria-hidden="true">→</span></button>
+      <button class="checkout-link-button full-width" id="account-signin-existing" type="button">I already have a Sora account</button>
+      <p class="checkout-safety full-width">Confirm your email before sign-in. Points and flight activity remain on this device; this site does not process reservations or payments.</p>
     </form>`;
   $("#profile-create-form").addEventListener("submit", createProfileForBooking);
   $("#account-signin-existing").addEventListener("click", () => renderRegistrationStep("signin"));
@@ -1071,6 +1072,11 @@ async function createProfileForBooking(event) {
   if (!result?.ok) {
     status.textContent = result?.message || "The profile could not be saved.";
     form.querySelector(result?.message?.includes("password") ? "#registration-password" : result?.message?.includes("email") || result?.message?.includes("already") ? "#registration-email" : "#registration-name").focus();
+    return;
+  }
+  if (result.needsEmailConfirmation) {
+    form.reset();
+    status.textContent = `${result.message} After confirmation, return to the site and sign in. If checkout has closed, search for your flight again.`;
     return;
   }
   finishAccountStep(result.profile);
