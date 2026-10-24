@@ -10,15 +10,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261019-seat-and-schedule2" />
+    <link rel="stylesheet" href="styles.css?v=20261024-language1" />
     <script src="settings.js?v=20261018-sora1" defer></script>
+    <script src="language.js?v=20261024-language1" defer></script>
     <script src="site-pages.js?v=20261019-seat-and-schedule2" defer></script>
-    <script src="sora-wallet.js?v=20261019-sora-status-redemption1" defer></script>
+    <script src="sora-supabase-config.js?v=20261021-sora-auth1" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="sora-auth.js?v=20261021-sora-auth1" defer></script>
+    <script src="sora-infinite-signups.js?v=20261021-sora-auth1" defer></script>
+    <script src="sora-wallet.js?v=20261024-sora-reset1" defer></script>
   </head>
   <body>
     <header class="site-header">
       <a class="brand-lockup" href="index.html#top" aria-label="Nippon Pacific Group home">
-        <img src="assets/npg-mark.svg" alt="" width="40" height="40" />
+        <img src="assets/npg-mark.svg" onerror="this.onerror=null;this.src='npg-mark.svg'" alt="" width="40" height="40" />
         <span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span>
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span></button>
@@ -89,13 +94,13 @@
             <div class="sora-wallet-copy"><span class="sora-kicker">YOUR SORA POINTS</span><h3 id="sora-wallet-title">A little further, with every flight.</h3><p>Eligible bookings add points to your balance.</p></div>
             <div class="sora-wallet-balance"><span>Current balance</span><strong id="sora-wallet-balance">0</strong><small>Sora Points</small></div>
           </div>
-          <div class="sora-wallet-profile"><span id="sora-account-summary">No profile is active. Create or sign in to keep points with a profile.</span><button id="sora-account-manage" type="button">Manage profiles</button></div>
-          <p class="sora-wallet-loyalty" id="sora-wallet-loyalty">Each cabin has its own yearly flight count and bonus. Create a profile to track them.</p>
+          <div class="sora-wallet-profile"><span id="sora-account-summary">Create an account or sign in to keep your Sora profile on this device.</span><button id="sora-account-manage" type="button">Manage account</button></div>
+          <p class="sora-wallet-loyalty" id="sora-wallet-loyalty">Each cabin has its own yearly flight count and bonus. Create an account to track them on this device.</p>
           <div class="sora-wallet-bottom">
             <div class="sora-wallet-activity"><span class="sora-kicker">RECENT ACTIVITY</span><p id="sora-wallet-empty">No points activity yet. Earned and redeemed points will appear here.</p><ul id="sora-wallet-activity" aria-live="polite"></ul></div>
             <div class="sora-wallet-rule"><span class="sora-kicker">SORA POINTS RULES</span><p><strong>Earn:</strong> Points rise with eligible fare and cabin: Economy earns 0.35 points per $1, Premium Economy 0.51, Class Silver 0.75, and Class Gold 1.00. Each completed flight in a cabin adds 5% to that cabin’s next annual earn multiplier, up to +50%; the four cabin classes track separately and reset each calendar year. Sora Plus adds a further 25% bonus. <strong>Spend:</strong> conversion of 100 points = $1 off an eligible flight, up to its fare. Gold and Platinum can be earned at their lifetime point thresholds or redeemed from your available balance. Redeeming a tier does not increase lifetime points.</p><a href="index.html#journey">Find a flight <span aria-hidden="true">↗</span></a></div>
           </div>
-          <p class="sora-wallet-disclaimer">Profiles and points are stored in this browser. This site is not connected to airline membership or billing systems.</p>
+          <p class="sora-wallet-disclaimer">Sora accounts use verified email sign-in. Points and flight activity remain stored in this browser.</p>
         </section>
         <div class="sora-points-grid">
           <article class="sora-points-card"><span class="sora-points-symbol" aria-hidden="true">✧</span><span class="sora-kicker">THE REWARD CURRENCY</span><h3>Sora Points</h3><p>Earned by booking eligible flights with any Nippon Pacific airline. A higher eligible fare earns more base points. Redeem points toward Gold or Platinum status, eligible flight costs, lounge passes, and selected rewards.</p><span class="sora-card-note">Earn across the group · redeem on eligible rewards</span></article>
@@ -114,44 +119,49 @@
           <div class="sora-airline-list sora-airline-list-large"><span><i class="tsuki-dot"></i><b>Tsuki Airways</b><small>Long-haul</small></span><span><i class="orbit-dot"></i><b>Tsuki Orbit</b><small>Regional</small></span><span><i class="pacifica-dot"></i><b>Grand Pacifica Air</b><small>Trans-Pacific</small></span></div>
         </div>
       </section>
-      <section class="sora-enrol-note section-shell"><span class="sora-note-mark" aria-hidden="true">空</span><div><strong>One membership across the group.</strong><p>Your profile and points are stored in this browser. Membership billing and reward redemptions are not connected to airline systems.</p></div><a href="index.html#journey">Plan a journey <span aria-hidden="true">↗</span></a></section>
+      <section class="sora-enrol-note section-shell"><span class="sora-note-mark" aria-hidden="true">空</span><div><strong>One membership across the group.</strong><p>Your account uses verified email sign-in. Points and flight activity are stored in this browser. Membership billing and reward redemptions are not connected to airline systems.</p></div><a href="index.html#journey">Plan a journey <span aria-hidden="true">↗</span></a></section>
     </main>
 
     <dialog class="sora-action-dialog sora-account-dialog" id="sora-account-dialog" aria-labelledby="sora-account-dialog-title">
       <button class="settings-close" type="button" aria-label="Close" data-close-sora-dialog>×</button>
-      <div class="settings-heading"><span class="settings-kicker">SORA PROFILE</span><h2 id="sora-account-dialog-title">Your Sora profile.</h2><p>Profiles and points stay in this browser. Use placeholder details only.</p></div>
-      <div id="sora-profile-current" class="sora-profile-current" hidden><p id="sora-profile-current-copy"></p><div><button class="button button-red" id="sora-profile-continue" type="button">Continue</button><button class="sora-secondary-button" id="sora-profile-more" type="button">Switch or add a profile</button></div></div>
+      <div class="settings-heading"><span class="settings-kicker">SORA ACCOUNT</span><h2 id="sora-account-dialog-title">Your Sora account.</h2><p>Create an account with your real email, then confirm it from your inbox. Infinite decisions are matched to this verified address.</p></div>
+      <div id="sora-profile-current" class="sora-profile-current" hidden><p id="sora-profile-current-copy"></p><div><button class="button button-red" id="sora-profile-continue" type="button">Continue</button><button class="sora-secondary-button" id="sora-profile-more" type="button">Sign out / switch account</button></div></div>
       <div id="sora-profile-forms" class="sora-profile-forms">
-        <div class="sora-profile-modes"><button type="button" data-sora-profile-mode="create" aria-pressed="true">Add profile</button><button type="button" data-sora-profile-mode="signin" aria-pressed="false">Use saved profile</button></div>
+        <div class="sora-profile-modes"><button type="button" data-sora-profile-mode="create" aria-pressed="true">Create account</button><button type="button" data-sora-profile-mode="signin" aria-pressed="false">Sign in</button></div>
         <form id="sora-profile-create" class="sora-profile-form">
-          <label class="checkout-field full-width" for="sora-profile-name">Name<input id="sora-profile-name" name="name" maxlength="40" autocomplete="off" placeholder="Traveler name" required /></label>
-          <label class="checkout-field full-width" for="sora-profile-email">Email<input id="sora-profile-email" name="email" type="text" inputmode="email" autocomplete="off" spellcheck="false" placeholder="traveler@example.test" required /></label>
-          <label class="checkout-field full-width" for="sora-profile-password">Password<input id="sora-profile-password" name="password" type="password" autocomplete="new-password" placeholder="Start with npg-" required /></label>
-          <button class="button button-red checkout-submit full-width" type="submit">Save profile <span aria-hidden="true">→</span></button>
+          <label class="checkout-field full-width" for="sora-profile-name">Name<input id="sora-profile-name" name="name" maxlength="40" autocomplete="name" placeholder="Your name" required /></label>
+          <label class="checkout-field full-width" for="sora-profile-email">Email<input id="sora-profile-email" name="email" type="email" maxlength="254" autocomplete="email" spellcheck="false" placeholder="you@example.com" required /></label>
+          <label class="checkout-field full-width" for="sora-profile-password">Password<input id="sora-profile-password" name="password" type="password" minlength="8" autocomplete="new-password" required /></label>
+          <button class="button button-red checkout-submit full-width" type="submit">Create account <span aria-hidden="true">→</span></button>
         </form>
         <form id="sora-profile-signin" class="sora-profile-form" hidden>
-          <label class="checkout-field full-width" for="sora-signin-email">Email<input id="sora-signin-email" name="email" type="text" inputmode="email" autocomplete="off" spellcheck="false" required /></label>
-          <label class="checkout-field full-width" for="sora-signin-password">Password<input id="sora-signin-password" name="password" type="password" autocomplete="off" required /></label>
+          <label class="checkout-field full-width" for="sora-signin-email">Email<input id="sora-signin-email" name="email" type="email" autocomplete="email" required /></label>
+          <label class="checkout-field full-width" for="sora-signin-password">Password<input id="sora-signin-password" name="password" type="password" autocomplete="current-password" required /></label>
           <button class="button button-red checkout-submit full-width" type="submit">Sign in <span aria-hidden="true">→</span></button>
         </form>
       </div>
       <p id="sora-profile-message" class="checkout-message" role="status" aria-live="polite"></p>
-      <p class="checkout-safety">Use an example.test email and a unique placeholder password beginning with npg-. This profile stays in this browser; sign-in and billing are not connected to airline systems.</p>
+      <p class="checkout-safety">Keep your password private. Account access and Infinite application decisions use Supabase; points and flight activity are still stored in this browser.</p>
     </dialog>
     <dialog class="sora-action-dialog" id="sora-action-dialog" aria-labelledby="sora-action-title">
       <button class="settings-close" type="button" aria-label="Close" data-close-sora-dialog>×</button>
       <div class="settings-heading"><span class="settings-kicker">SORA MEMBERSHIP</span><h2 id="sora-action-title">Confirm your choice.</h2><p id="sora-action-copy"></p></div>
+      <div id="sora-infinite-fields" class="sora-infinite-fields" hidden>
+        <label class="checkout-field full-width" for="sora-infinite-name">Name<input id="sora-infinite-name" name="infinite-name" type="text" maxlength="80" autocomplete="name" required /></label>
+        <label class="checkout-field full-width" for="sora-infinite-email">Verified account email<input id="sora-infinite-email" name="infinite-email" type="email" maxlength="254" autocomplete="email" required readonly /></label>
+        <label class="sora-infinite-consent" for="sora-infinite-consent"><input id="sora-infinite-consent" type="checkbox" required /><span>I agree that Nippon Pacific Group may store these details and contact me about Sora Infinite consideration.</span></label>
+      </div>
       <p id="sora-action-message" class="checkout-message" role="status" aria-live="polite"></p>
       <button class="button button-red checkout-submit" id="sora-action-confirm" type="button">Confirm</button>
-      <p class="checkout-safety">Membership options and interest requests are saved to this browser. No payment or invitation request is sent to airline systems.</p>
+      <p class="checkout-safety">Applications are tied to your verified Sora account email. NPG reviews them in the private application list.</p>
     </dialog>
 
-    <footer class="site-footer"><div class="footer-main section-shell"><a class="brand-lockup footer-brand" href="index.html#top"><img src="assets/npg-mark.svg" alt="" width="38" height="38" /><span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span></a><p>Thoughtful journeys across Japan, the Pacific, and beyond.</p><div class="footer-links"><a href="index.html#airlines">Airlines</a><a href="sora.html" aria-current="page">Discover Sora</a><a href="journeys.html">Tsuki: Journeys</a><a href="routes.html">Routes</a><a href="fleet.html">Fleet</a><a href="index.html#journey">Find a flight</a></div></div><div class="footer-bottom section-shell"><span>© 2026 Nippon Pacific Group</span><span class="service-note">Profiles stay in this browser; reservations and payments are not processed here.</span><a href="#sora-page">Back to top ↑</a></div></footer>
+    <footer class="site-footer"><div class="footer-main section-shell"><a class="brand-lockup footer-brand" href="index.html#top"><img src="assets/npg-mark.svg" onerror="this.onerror=null;this.src='npg-mark.svg'" alt="" width="38" height="38" /><span class="brand-type"><strong>NIPPON PACIFIC</strong><small>GROUP · 日本太平洋グループ</small></span></a><p>Thoughtful journeys across Japan, the Pacific, and beyond.</p><div class="footer-links"><a href="index.html#airlines">Airlines</a><a href="sora.html" aria-current="page">Discover Sora</a><a href="journeys.html">Tsuki: Journeys</a><a href="routes.html">Routes</a><a href="fleet.html">Fleet</a><a href="index.html#journey">Find a flight</a></div></div><div class="footer-bottom section-shell"><span>© 2026 Nippon Pacific Group</span><span class="service-note">Profiles stay in this browser; reservations and payments are not processed here.</span><a href="#sora-page">Back to top ↑</a></div></footer>
 
     <dialog class="site-settings-dialog" id="site-settings-dialog" aria-labelledby="site-settings-title">
       <button class="settings-close" type="button" aria-label="Close settings">×</button>
       <div class="settings-heading"><span class="settings-kicker">A LITTLE PERSONAL COMFORT</span><h2 id="site-settings-title">Make yourself at home.</h2><p>Your preferences stay in this browser.</p></div>
-      <div class="settings-options"><label class="settings-option" for="setting-dark-mode"><span><strong>Dark mode</strong><small>A softer, darker palette for every page.</small></span><input id="setting-dark-mode" type="checkbox" role="switch" /></label><label class="settings-option" for="setting-animations"><span><strong>Animations</strong><small>Turn movement and transitions on or off.</small></span><input id="setting-animations" type="checkbox" role="switch" /></label></div>
+      <div class="settings-options"><label class="settings-option language-setting" for="setting-language"><span><strong>Language</strong><small>Choose the language used on this site.</small></span><select id="setting-language" aria-label="Language"><option value="en">English</option><option value="id">Bahasa Indonesia</option><option value="hi">हिन्दी</option><option value="bn">বাংলা</option><option value="ja">日本語</option><option value="es">Español</option></select></label><label class="settings-option" for="setting-dark-mode"><span><strong>Dark mode</strong><small>A softer, darker palette for every page.</small></span><input id="setting-dark-mode" type="checkbox" role="switch" /></label><label class="settings-option" for="setting-animations"><span><strong>Animations</strong><small>Turn movement and transitions on or off.</small></span><input id="setting-animations" type="checkbox" role="switch" /></label></div>
       <section class="stress-relief" aria-labelledby="stress-relief-title"><span class="settings-kicker" id="stress-relief-title">EXTREMELY IMPORTANT SETTING</span><button id="stress-relief-button" class="stress-relief-button" type="button">Press for stress relief ✦</button><p id="stress-relief-message" aria-live="polite">No practical effect. Vibes may improve.</p></section>
     </dialog>
   </body>
