@@ -2411,14 +2411,14 @@ h1,h2,p {
 }
 .journeys-promo-map {
   position:absolute;
-  top:30%;
-  left:5%;
-  width:90%;
-  height:41%;
-  border:1px solid rgba(226,213,237,.22);
-  border-radius:7px;
+  inset:10%;
+  width:80%;
+  height:80%;
+  border-radius:50%;
   object-fit:fill;
-  box-shadow:0 12px 28px rgba(11,21,29,.24)
+  opacity:.92;
+  -webkit-mask-image:radial-gradient(circle,#000 87%,transparent 100%);
+  mask-image:radial-gradient(circle,#000 87%,transparent 100%)
 }
 .journeys-page {
   overflow:hidden;
@@ -2537,18 +2537,21 @@ h1,h2,p {
 .journeys-hero-art-foot { bottom:10%; color:#b8afbf }
 .journeys-hero-map {
   position:absolute;
-  inset:29% 6% 27%;
+  inset:12%;
   overflow:hidden;
-  border:1px solid rgba(227,217,236,.3);
-  border-radius:7px;
-  background:#102b35;
-  box-shadow:0 12px 30px rgba(8,18,27,.25)
+  border:1px solid rgba(227,217,236,.12);
+  border-radius:50%;
+  background:radial-gradient(circle at 50% 45%,rgba(214,199,226,.09),rgba(90,79,105,.06) 62%,rgba(41,38,49,.02) 78%,transparent 100%);
+  box-shadow:inset 0 0 38px rgba(224,211,238,.045);
+  -webkit-mask-image:radial-gradient(circle,#000 87%,transparent 100%);
+  mask-image:radial-gradient(circle,#000 87%,transparent 100%)
 }
 .journeys-hero-map img {
   display:block;
   width:100%;
   height:100%;
-  object-fit:fill
+  object-fit:fill;
+  opacity:.92
 }
 .journeys-hero-index {
   position:absolute;
@@ -5241,6 +5244,9 @@ html.motion-ready [data-motion-reveal].is-in-view {
 .sora-profile-form .checkout-field { color:#62675f }
 .sora-action-dialog .checkout-safety { margin-top:15px }
 .sora-action-dialog .checkout-message { margin:12px 0 }
+.sora-infinite-fields:not([hidden]) { display:grid; gap:11px; margin:15px 0 }
+.sora-infinite-consent { display:flex; align-items:flex-start; gap:9px; color:#687067; font-size:9px; line-height:1.55 }
+.sora-infinite-consent input { flex:none; width:14px; height:14px; margin:1px 0 0; accent-color:#31483c }
 .sora-action-dialog .settings-close { z-index:1 }
 html[data-theme="dark"] .sora-tier-action { color:#e2e8df; border-color:#647269 }
 html[data-theme="dark"] .sora-tier-action:hover:not(:disabled) { color:#15201a; background:#c9d3c3; border-color:#c9d3c3 }
@@ -5256,6 +5262,7 @@ html[data-theme="dark"] .sora-wallet-loyalty { color:#c0c9c2; background:#263335
 html[data-theme="dark"] .sora-action-dialog { background:#20292c; border-color:#3c484b; color:#e9e7df }
 html[data-theme="dark"] .sora-action-dialog .settings-heading h2 { color:#e9e7df }
 html[data-theme="dark"] .sora-action-dialog .settings-heading p { color:#b1bab4 }
+html[data-theme="dark"] .sora-infinite-consent { color:#c1c9c2 }
 html[data-theme="dark"] .sora-profile-current { background:#263335; border-color:#394849 }
 html[data-theme="dark"] .sora-profile-current p { color:#c5cec7 }
 html[data-theme="dark"] .sora-profile-modes button { color:#c1c9c2; border-color:#4b5a52 }
@@ -5569,3 +5576,20 @@ html.animations-off [data-motion-reveal] {
     transform:none
   }
 }
+
+/* Language picker in the shared site settings. */
+.settings-option select {
+  width:min(165px,45%);
+  min-width:130px;
+  padding:8px 27px 8px 9px;
+  border:1px solid var(--line);
+  border-radius:3px;
+  background:var(--white);
+  color:var(--ink);
+  font:inherit;
+  font-size:10px;
+  cursor:pointer
+}
+.settings-option select:focus-visible { outline:2px solid var(--red); outline-offset:3px }
+html[data-theme="dark"] .settings-option select { border-color:#58615b; background:#202825; color:#e9e7df }
+@media (max-width:440px) { .settings-option select { width:43%; min-width:112px; font-size:9px } }
