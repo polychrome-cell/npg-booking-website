@@ -10,10 +10,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20261019-seat-and-schedule2" />
-    <script src="settings.js?v=20261018-sora1" defer></script>
-    <script src="sora-wallet.js?v=20261019-sora-status-redemption1" defer></script>
-    <script src="app.js?v=20261019-seat-and-schedule2" defer></script>
+    <link rel="stylesheet" href="styles.css?v=20261024-language1" />
+    <script src="settings.js?v=20261022-remove-intro1" defer></script>
+    <script src="language.js?v=20261024-language1" defer></script>
+    <script src="sora-supabase-config.js?v=20261021-sora-auth1" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="sora-auth.js?v=20261021-sora-auth1" defer></script>
+    <script src="sora-wallet.js?v=20261021-sora-auth1" defer></script>
+    <script src="app.js?v=20261021-sora-auth1" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -142,7 +146,7 @@
     <dialog class="site-settings-dialog" id="site-settings-dialog" aria-labelledby="site-settings-title">
       <button class="settings-close" type="button" aria-label="Close settings">×</button>
       <div class="settings-heading"><span class="settings-kicker">A LITTLE PERSONAL COMFORT</span><h2 id="site-settings-title">Make yourself at home.</h2><p>Your preferences stay in this browser.</p></div>
-      <div class="settings-options">
+      <div class="settings-options"><label class="settings-option language-setting" for="setting-language"><span><strong>Language</strong><small>Choose the language used on this site.</small></span><select id="setting-language" aria-label="Language"><option value="en">English</option><option value="id">Bahasa Indonesia</option><option value="hi">हिन्दी</option><option value="bn">বাংলা</option><option value="ja">日本語</option><option value="es">Español</option></select></label>
         <label class="settings-option" for="setting-dark-mode"><span><strong>Dark mode</strong><small>A softer, darker palette for every page.</small></span><input id="setting-dark-mode" type="checkbox" role="switch" /></label>
         <label class="settings-option" for="setting-animations"><span><strong>Animations</strong><small>Turn movement and transitions on or off.</small></span><input id="setting-animations" type="checkbox" role="switch" /></label>
       </div>
